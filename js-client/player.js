@@ -15,7 +15,8 @@ var DigitalFrontierAS = (function () {
             compressorNode,
             destination,
             
-            loop = null,
+            // This variable holds...
+            run = null,
 
             LOAD_AHEAD_TIME_MAX = 10.0,
             LOAD_AHEAD_TIME_MIN = 1.0,
@@ -24,10 +25,6 @@ var DigitalFrontierAS = (function () {
         
         this.composition = null;
 
-        this.currentSequence = null;
-        this.currentSequenceCounter = 0;
-        this.currentSequenceRevolutions = 0;
-        
         //this.ended = false; // TODO
         this.playing = false;
         this.waiting = true;
@@ -115,7 +112,7 @@ var DigitalFrontierAS = (function () {
         }
 
 
-        function nextLoop(offset, sequenceName) {
+        function nextRun(offset, sequenceName) {
             if (!offset) offset = 0;
             let revolutions = 0;
             let sequence;
@@ -234,10 +231,6 @@ var DigitalFrontierAS = (function () {
         };
 
         this.play = function () {
-            this.currentSequence = null;
-            this.currentSequenceCounter = 0;
-            this.currentSequenceRevolutions = 0;
-
             this.ended = false;
             this.waiting = true;
             this.loadComplete = false;
@@ -256,7 +249,7 @@ var DigitalFrontierAS = (function () {
             //destination = context.destination;
             
             startTime = context.currentTime;
-            loop = null;
+            run = null;
             firstTime = true;
             loadAheadOffset = 0.0;
             loadAhead();
@@ -356,35 +349,30 @@ var DigitalFrontierAS = (function () {
         function loadAhead() {
             if (!player.playing) return;
             if (firstTime) {
-                loop = nextLoop();
+                run = nextRun();
                 firstTime = false;
-                scheduleLoop();
+                scheduleRun();
                 return;
             } 
-            if (!loop) return;
-            let nextOffset = loop.nextOffset;
+            if (!run) return;
+            let nextOffset = run.nextOffset;
             if (nextOffset && nextOffset - player.currentTime() < LOAD_AHEAD_TIME_MAX) {
-                let counter = loop.counter;
+                let counter = run.counter;
                 counter++;
-                if (counter == loop.revolutions) {
-                    loop = nextLoop(nextOffset, loop.sequenceName);
+                if (counter == run.revolutions) {
+                    run = nextRun(nextOffset, run.sequenceName);
                 } else {
-                    loop = {
+                    run = {
                         offset: nextOffset,
-                        sequenceName: loop.sequenceName,
-                        revolutions: loop.revolutions,
+                        sequenceName: run.sequenceName,
+                        revolutions: run.revolutions,
                         counter: counter
                     };
                 }
-                if (loop) {
-                    scheduleLoop();
+                if (run) {
+                    scheduleRun();
                 } else {
                     // Nothing more to play
-                    player.schedule(nextOffset, function () { 
-                        player.currentSequence = null;
-                        player.currentSequenceCounter = 0;
-                        player.currentSequenceRevolutions = 0;
-                    });
                     player.schedule(duration, finish);
                     player.loadComplete = true;
                 }
@@ -396,34 +384,37 @@ var DigitalFrontierAS = (function () {
         
 
         // ------------------------------------------------------------------------------------------------
-        // Scheduling
+        // Scheduling - placing samples and events on the audio context timeline. Asynchronous stuff.
         // ------------------------------------------------------------------------------------------------
 
-        function scheduleLoop() {
-            let sequence = sequences[loop.sequenceName];
+        function scheduleRun() {
+            let sequence = sequences[run.sequenceName];
 
             let layout = layOutSequence(sequence);
 
-            if (loop.offset + layout[0].time < 0.0) {
-                // This should only happen the very first loop, in case of "prelude"
-                loop.offset -= layout[0].time;
+            if (run.offset + layout[0].time < 0.0) {
+                // This should only happen the very first run, in case of "prelude"
+                run.offset -= layout[0].time;
             }
-            let offset = loop.offset;
+            let offset = run.offset;
             
             let nextOffset = offset + sequence.numBeats * 60.0 / sequence.bpm; // Next sequence starts here
-            let currentLoop = loop;
-            player.schedule(offset, function () { 
-                player.currentSequence = currentLoop.sequenceName;
-                player.currentSequenceCounter = currentLoop.counter;
-                player.currentSequenceRevolutions = currentLoop.revolutions;
-                if (player.onSequenceStart) player.onSequenceStart(offset, currentLoop.sequenceName, currentLoop.counter, currentLoop.revolutions);
+            let currentRun = run;
+            
+            // Schedule sequence start event
+            player.schedule(offset, function () {
+                if (player.onSequenceStart) player.onSequenceStart(offset, currentRun.sequenceName, currentRun.counter, currentRun.revolutions);
             });
-            player.schedule(nextOffset, function () { 
-                if (player.onSequenceEnd) player.onSequenceEnd(nextOffset, currentLoop.sequenceName, currentLoop.counter, currentLoop.revolutions); 
+            
+            // Schedule sequence end event
+            player.schedule(nextOffset, function () {
+                if (player.onSequenceEnd) player.onSequenceEnd(nextOffset, currentRun.sequenceName, currentRun.counter, currentRun.revolutions); 
             });
+            
+            // 
             scheduleLayout(layout, offset, function () {
                 loadAheadOffset = Math.max(loadAheadOffset, nextOffset);
-                currentLoop.nextOffset = nextOffset;
+                currentRun.nextOffset = nextOffset;
             });
         }
 
