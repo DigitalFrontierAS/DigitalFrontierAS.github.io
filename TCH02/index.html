@@ -564,6 +564,30 @@ border:thin solid black;
   width: 100% !important;
   height: 100% !important;
 }
+	
+	.sorry{
+	position:absolute;
+		text-align:center;
+		width:100%;
+		top:50vh;
+		display:none;
+		font-size:20px;
+	}
+	
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+	  
+	  .sorry {
+	  display:block;
+	  }
+	  
+	  .background {
+	  display:none;
+	  }
+
+}
 
 	
 </style>
@@ -636,6 +660,9 @@ border:thin solid black;
 	                </video>
          </div>
          
+	<div class="sorry">
+	Initial Structure is best experienced on a desktop computer with Chrome - sorry about that.	
+	</div>
 
         
         <div class="bottommargin">
