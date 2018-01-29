@@ -247,7 +247,7 @@ player.onPlaying = function () {
             if ((sample.substring(0, 5) == "R606_")) {
                             setTimeout(function(){
                 R606.classList.remove("creditVisible");
-                            }, 500);
+                            }, 1000);
             }
             if ((sample.substring(0, 6) == "COUNT1")) {
                             setTimeout(function(){
@@ -412,13 +412,13 @@ text-align:center;
 	}
 	
 	.singlecredit div {
-color:silver;
+color:#8A8989;
 	    transition:color 0.5s ease;
 	    -webkit-transition:color 0.5s ease;
 	}
 	
 	#recCredits {
-        color:silver;
+        color:#8A8989;
         float: left;
     margin: 0px 3px;
 	    transition:color 0.5s ease;
@@ -479,24 +479,24 @@ color:silver;
 }
 
 .bottommargin {
-height: auto;
-width: calc(100% - 40px);
-bottom: 0;
-border-top: thin solid silver;
-position: fixed;
-margin-left: 20px;
-padding: 10px 0px;;
+    height: auto;
+    width: 100%;
+    bottom: 0;
+    position: fixed;
+    padding: 10px 0px;
 }
 
 
 .centermargin {
-    width:100%;
+width:100px;
     text-align:center;
     margin:0 auto;
     padding-top:50px;
     margin-bottom:50px;
 }
-
+.centermargin img {
+max-width:100%;	
+}
 
 	
 .TCH {
@@ -504,12 +504,16 @@ padding: 10px 0px;;
 }
 
 .IS {
-    font-family: 'Pinyon Script', cursive;
+	position:absolute;
+	width:100%;
+	bottom:10vh;
+	font-size: 28px;
+    	font-family: 'Pinyon Script', cursive;
 }
 
 
 a {
-    color:silver;
+    color:#8A8989;
     text-decoration:none;
 }
 	a:hover {
@@ -534,7 +538,7 @@ margin:0 auto;
 font-size: 10px;
 line-height: 16px;
 float: left;
-color:silver;
+color:#8A8989;
 padding:0px 10px;
 }
 
@@ -581,7 +585,7 @@ border:thin solid black;
         
         <div class="rightmargin">
             <div class="centermargin">    
-                <div onclick="imageClicked()"><span class="TCH">Tropical Contact High</span><br><span class="SecLine"><span class="IS">Initial Structure</span>
+                <img src="TCH_logo.png">
             </div>
         </div>
         
@@ -643,9 +647,11 @@ border:thin solid black;
 	                </video>
          </div>
          
+	<div class="IS">Initial Structure</div>
 
         
         <div class="bottommargin">
+		<div style="margin:0 auto;width:1150px;">
  <div class="halfcol" style="width: 50px;margin-top:3px;height: auto;margin-right: 10px;float: left;padding: 0;"><img src="TCH.png"></div>
  
                         <div class="halfcol" style="width:auto;min-width:500px;border-right: thin solid silver;border-left: thin solid silver;">The Digital Aleatoric Music (DAM) format from Digital Frontier allows this digital release to sound different every time it's played.<br>Music composed by Tropical Contact High. Code by Rune Botten and Are Meisfjord. Video by Stan Stencil. Web by <a href="http://www.jonasersland.net">Jonas Ersland</a><br><div style="float:left">Recorded and mixed at Street Pulse Studio, Berlin</div> <div id="recCredits" class="">and Malabar Studio B, Oslo </div><div style="float:left">by Tropical Contact High</div></div>
@@ -678,6 +684,7 @@ border:thin solid black;
                         </div>
                             
                         </div>
+			</div>
              </div>
             </div>
         </div>
