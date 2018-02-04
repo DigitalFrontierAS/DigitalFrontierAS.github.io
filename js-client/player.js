@@ -3,9 +3,9 @@ var DigitalFrontierAS = (function () {
     "use strict";
 
     function Player(composition, baseUrl) {
-      window.AudioContext = window.AudioContext || window.webkitAudioContext;
         // Local, "private" variables
-        let context = new window.AudioContext(),
+        let AudioContext = window.AudioContext || window.webkitAudioContext,
+            context = new AudioContext(),
             startTime = null,
             sequences =  null,
             groups = null,
@@ -248,7 +248,7 @@ var DigitalFrontierAS = (function () {
             this.playing = true;
 
             if (context.state !== "closed") context.close();
-            context = new window.AudioContext();
+            context = new AudioContext();
             context.suspend();
 
             compressorNode = context.createDynamicsCompressor();
