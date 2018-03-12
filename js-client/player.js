@@ -4,7 +4,8 @@ var DigitalFrontierAS = (function () {
 
     function Player(composition, baseUrl) {
         // Local, "private" variables
-        let context = new window.AudioContext(),
+        let AudioContext = window.AudioContext || window.webkitAudioContext,
+            context = new AudioContext(),
             startTime = null,
             sequences =  null,
             groups = null,
@@ -15,20 +16,20 @@ var DigitalFrontierAS = (function () {
             compressorNode,
             destination,
             extensions,
-            
+
             loop = null,
 
             LOAD_AHEAD_TIME_MAX = 10.0,
             LOAD_AHEAD_TIME_MIN = 1.0,
 
             TRIGGER_BUFFER = context.createBuffer(1, 1, context.sampleRate);
-        
+
         this.composition = null;
 
         this.currentSequence = null;
         this.currentSequenceCounter = 0;
         this.currentSequenceRevolutions = 0;
-        
+
         //this.ended = false; // TODO
         this.playing = false;
         this.waiting = true;
@@ -42,20 +43,20 @@ var DigitalFrontierAS = (function () {
         //this.onPlay = null; // TODO
         this.onPlaying = null;
         this.onWaiting = null;
-        
-        
+
+
         this.onSequenceStart = null;
         this.onSequenceEnd = null;
         this.onGroupStart = null;
         this.onSampleStart = null;
         this.onSampleEnd = null;
         this.onBeat = null;
-        
+
         let player = this;
 
         if (composition) { this.load(composition, baseUrl); }
-        
-        
+
+
         // ------------------------------------------------------------------------------------------------
         // Structure and layout
         // ------------------------------------------------------------------------------------------------
@@ -88,7 +89,7 @@ var DigitalFrontierAS = (function () {
             if (!extensions) extensions = [];
         }
 
-        
+
         function tearDown() {
             Object.keys(groups).forEach(function (key) {
                 const group = groups[key];
@@ -99,7 +100,7 @@ var DigitalFrontierAS = (function () {
             player.loadComplete = false;
         }
 
-        
+
         function layOutSequence(sequence, layout, insertionPoint) {
             if (!layout) layout = [];
             if (!insertionPoint) insertionPoint = 0.0;
@@ -135,7 +136,7 @@ var DigitalFrontierAS = (function () {
                 if (!sequenceName) return null;
                 sequence = sequences[sequenceName];
                 if (!sequence) throw Error("Could not find sequence '" + sequenceName + "'");
-                
+
                 let nextAfterTime = nextAfter.length > 0 ? nextAfter[nextAfter.length-1].time - offset : Infinity;
                 let divisibleBy = sequence.divisibleBy ? sequence.divisibleBy : 1;
                 if (nextAfterTime <= 0.0) {
@@ -147,7 +148,7 @@ var DigitalFrontierAS = (function () {
                     revolutions = Math.min(revolutions, maxFromNextAfterTime);
                 }
             } while (revolutions === 0);
-            
+
             return {
                 offset: offset,
                 sequenceName: sequenceName,
@@ -191,7 +192,7 @@ var DigitalFrontierAS = (function () {
                 } else if (element.probability === undefined) {
                     noProbCount++;
                 } else {
-                    sumProb += element.probability;   
+                    sumProb += element.probability;
                 }
             }
 
@@ -245,19 +246,19 @@ var DigitalFrontierAS = (function () {
             this.waiting = true;
             this.loadComplete = false;
             this.playing = true;
-            
+
             if (context.state !== "closed") context.close();
-            context = new window.AudioContext();
+            context = new AudioContext();
             context.suspend();
-            
+
             compressorNode = context.createDynamicsCompressor();
             compressorNode.connect(context.destination);
-            
+
             destination = compressorNode;
             this.refreshCompressor(this.composition.compressor);
-            
+
             //destination = context.destination;
-            
+
             startTime = context.currentTime;
             loop = null;
             firstTime = true;
@@ -280,7 +281,7 @@ var DigitalFrontierAS = (function () {
         this.currentTime = function () {
             return context.currentTime - startTime;
         };
-        
+
         this.refresh = function (composition) {
             if (!this.composition) return;
             this.refreshCompressor(composition.compressor);
@@ -294,7 +295,7 @@ var DigitalFrontierAS = (function () {
                 }
             }
         };
-        
+
         this.refreshGain = function (sequenceName, groupName, gain) {
             const key = sequenceName + "." + groupName;
             const group = groups[key];
@@ -306,7 +307,7 @@ var DigitalFrontierAS = (function () {
                 }
             }
         };
-        
+
         this.refreshCompressor = function (c) {
             if (compressorNode) {
                 if (!c) c = this.composition && this.composition.compressor;
@@ -333,8 +334,8 @@ var DigitalFrontierAS = (function () {
                 source.start(startTime + offset);
             }
         };
-        
-        
+
+
         function checkLoadAheadStatus() {
             if (!player.playing) return;
             if (player.loadComplete) return;
@@ -352,10 +353,10 @@ var DigitalFrontierAS = (function () {
         }
 
         setInterval(checkLoadAheadStatus, 100);
-        
-        
+
+
         let firstTime = true;
-        
+
         function loadAhead() {
             if (!player.playing) return;
             if (firstTime) {
@@ -363,7 +364,7 @@ var DigitalFrontierAS = (function () {
                 firstTime = false;
                 scheduleLoop();
                 return;
-            } 
+            }
             if (!loop) return;
             let nextOffset = loop.nextOffset;
             if (nextOffset && nextOffset - player.currentTime() < LOAD_AHEAD_TIME_MAX) {
@@ -383,7 +384,7 @@ var DigitalFrontierAS = (function () {
                     scheduleLoop();
                 } else {
                     // Nothing more to play
-                    player.schedule(nextOffset, function () { 
+                    player.schedule(nextOffset, function () {
                         player.currentSequence = null;
                         player.currentSequenceCounter = 0;
                         player.currentSequenceRevolutions = 0;
@@ -396,7 +397,7 @@ var DigitalFrontierAS = (function () {
 
 
         setInterval(loadAhead, 100);
-        
+
 
         // ------------------------------------------------------------------------------------------------
         // Scheduling
@@ -412,17 +413,17 @@ var DigitalFrontierAS = (function () {
                 loop.offset -= layout[0].time;
             }
             let offset = loop.offset;
-            
+
             let nextOffset = offset + sequence.numBeats * 60.0 / sequence.bpm; // Next sequence starts here
             let currentLoop = loop;
-            player.schedule(offset, function () { 
+            player.schedule(offset, function () {
                 player.currentSequence = currentLoop.sequenceName;
                 player.currentSequenceCounter = currentLoop.counter;
                 player.currentSequenceRevolutions = currentLoop.revolutions;
                 if (player.onSequenceStart) player.onSequenceStart(offset, currentLoop.sequenceName, currentLoop.counter, currentLoop.revolutions);
             });
-            player.schedule(nextOffset, function () { 
-                if (player.onSequenceEnd) player.onSequenceEnd(nextOffset, currentLoop.sequenceName, currentLoop.counter, currentLoop.revolutions); 
+            player.schedule(nextOffset, function () {
+                if (player.onSequenceEnd) player.onSequenceEnd(nextOffset, currentLoop.sequenceName, currentLoop.counter, currentLoop.revolutions);
             });
             scheduleLayout(layout, offset, function () {
                 loadAheadOffset = Math.max(loadAheadOffset, nextOffset);
@@ -516,5 +517,5 @@ var DigitalFrontierAS = (function () {
     return {
         Player: Player
     };
-	
+
 })();
