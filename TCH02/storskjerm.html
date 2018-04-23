@@ -315,23 +315,20 @@ body {
     line-height: 30px;
     background-color:#F8F8F8;
 }
+
 img {
 max-width:100%;
 }
-.background {
-height: 60vh;
-width:100%;
-margin: 0 auto;
-position: fixed;
-text-align:center;
-}
+
+.background {height: calc(100vh - 140px);width: calc(100vw - 140px);margin-left: 70px;position: fixed;text-align:center;overflow: hidden;margin-top: 70px;}
+
 	.fullscreen {
 	position:relative;
-    width: 100%;
-    height: 100%;
-    left: 50%;
-    top: 50%;
-    transform: translateX(-50%) translateY(-50%);
+	min-width: 100%;
+	min-height: 100%;
+	left: 50%;
+	top: 50%;
+	transform: translateX(-50%) translateY(-50%);
 	}
 	#video {
 		z-index: 10;
@@ -396,6 +393,7 @@ text-align:center;
 	}
 	
 	#A4, #B,#CS, #D, #PV, #SW, #J60, #JPAD, #JV, #VC, #Z, #MS, #R606, #COUNT1, #P{
+
 	}
 	
 	.singlecredit div {
@@ -452,23 +450,18 @@ color:#8A8989;
 	    position:absolute;
 	    width:100%;
 	}
+
 	
 	#bgvisible {
 	    opacity:1;
 	}
 	
-.rightmargin {
-height: 160px;
-position: relative;
-width: 100%;
-margin:0 auto;
-padding-top:35px;
-text-align: center;
-}
+.rightmargin {height: 130px;position: absolute;width: 100%;margin:0 auto;padding-top: 26px;text-align: center;z-index: 4;background: white;width: 130px;border-radius: 50%;}
 	
 	.rightmargin img {
 		max-width:80px;	
 	}
+
 .bottommargin {
     height: auto;
     width: 100%;
@@ -476,6 +469,8 @@ text-align: center;
     position: fixed;
     padding: 10px 0px;
 }
+
+
 .centermargin {
 width:100px;
     text-align:center;
@@ -486,10 +481,12 @@ width:100px;
 .centermargin img {
 max-width:100%;	
 }
+
 	
 .TCH {
     text-transform:uppercase;
 }
+
 .IS {
 	display:none;
 	position:absolute;
@@ -499,6 +496,8 @@ max-width:100%;
 	text-align:center;
     	font-family: 'Pinyon Script', cursive;
 }
+
+
 a {
     color:#8A8989;
     text-decoration:none;
@@ -506,6 +505,7 @@ a {
 	a:hover {
 	color:black;
 	}
+
 #credits {
     font-style: italic;
     display: inline;
@@ -513,10 +513,13 @@ a {
     transition: color 0.5s ease-in-out;
     -webkit-transition: color 0.5s ease-in-out;
 }
+
+
 .columns {
 width:60%;
 margin:0 auto;
 }
+
 .halfcol {
 font-size: 10px;
 line-height: 16px;
@@ -524,31 +527,29 @@ float: left;
 color:#8A8989;
 padding:0px 10px;
 }
+
 html, body { 
 height: 100%; 
 }
-.responsive-embed {
-height: calc(100% + 18px);
-margin-top: -9px;
-padding-top: 5px;
-display: inline-block; 
-position: relative; 
-border:thin solid black;
-}
+
+
+.responsive-embed {height: calc(100vh - 122px);margin-top: -9px;/* padding-top: 5px; */margin-left: -9px;display: none;position: relative;border:thin solid black;width: calc(100vw - 122px);}
+
+
+
 .ratio {
   height: 100%;
   width: auto; 
   visibility: hidden; 
   text-align: left;
 }
+
 .responsive-embed .embed {
   position: absolute !important;
   top: 0 !important; left: 0 !important;
   width: 100% !important;
   height: 100% !important;
 }
-	
-	
 	
 </style>
 
