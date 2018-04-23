@@ -447,8 +447,12 @@ color:#8A8989;
 	    opacity:0 !important;
 	}
 	.playpause {
-	    position:absolute;
-	    width:100%;
+	     position: relative;
+    width: 670px;
+		margin:0 auto;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 	}
 
 	
@@ -543,7 +547,13 @@ height: 100%;
 }
 
 
-.responsive-embed {height: calc(100vh - 140px);position: relative;width: calc(100vw - 140px);}
+.responsive-embed {
+	height: calc(100vh - 140px);
+	width: calc(100vw - 140px);
+	  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+	}
 
 .ratio {
   height: 100%;
