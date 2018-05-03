@@ -7,6 +7,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	
 <script type="text/javascript">
+$( '.bg1' ).load(function() {
+    $( '.everything' ).fadeIn(500);
+});
+	
 /* global DigitalFrontierAS */
 var player = new DigitalFrontierAS.Player();
 var compositions = ["http://dam.digi-front.com/TCH02/music/TCH02606.json"];
@@ -721,10 +725,6 @@ text-align:right;
 	                </video>
          </div>
 <script>	
-	
-$( '.bg1' ).load(function() {
-    $( '.everything' ).fadeIn(500);
-});
 	
 $(document).ready(function(){
 $("#slideshow > div:gt(0)").hide();
