@@ -314,6 +314,7 @@ body {
     font-weight: 300;
     line-height: 30px;
     background-color:#F8F8F8;
+	-webkit-font-smoothing:antialiased;
 }
 
 img {
@@ -704,6 +705,11 @@ position:fixed;
 	                </video>
          </div>
 <script>
+	
+$(document).ready(function() {
+    $(body).fadeIn();
+});	
+	
 $(document).ready(function(){
 $("#slideshow > div:gt(0)").hide();
 
