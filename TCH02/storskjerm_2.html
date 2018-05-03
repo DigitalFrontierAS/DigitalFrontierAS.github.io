@@ -1,0 +1,707 @@
+<html>
+<head>
+<script src="http://dam.digi-front.com/js-client/player.js" ></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Pinyon+Script" rel="stylesheet">
+	
+<script type="text/javascript">
+/* global DigitalFrontierAS */
+var player = new DigitalFrontierAS.Player();
+var compositions = ["http://dam.digi-front.com/TCH02/music/TCH02606.json"];
+var songUrl = "";
+var ready = false;
+var newVid = "";
+player.onEnded = function () {
+	console.log('ended');
+	playing = false;
+    document.getElementById("pause").classList.remove('playpauseshown');
+    document.getElementById("pause").classList.add('playpausehidden');
+    document.getElementById("play").classList.remove('playpausehidden');
+    document.getElementById("play").classList.add('playpauseshown');
+    document.querySelector('div.background').id = '';
+    document.querySelector('div.bg1').id = 'bgvisible';
+    document.querySelector('div.sc').classList.remove('creditVisible');
+};
+$(document).ready(function(){
+    $(".playpause").click(function() {
+    $('img.pause').toggleClass("playpauseshown");
+    $('img.play').toggleClass("playpauseshown");
+    $('img.play').toggleClass("playpausehidden");
+    $('.background').attr('id', ' ');
+    $('.bg1').attr('id', 'bgvisible');
+    $('.sc').removeClass('creditVisible');
+    setTimeout(function(){
+        $('img.pause').toggleClass("playpausehidden");
+    }, 2000);
+    });
+});
+player.onPlaying = function () {
+	var video = document.getElementById("bgvisible");
+    var isPlaying = video.currentTime > 0 && !video.paused && !video.ended && video.readyState > 2;
+    if (!isPlaying) {
+        
+        player.onSequenceStart = function (offset, sequence, counter, revolutions) {
+            var currentSeq = sequence;
+            var currentSeqNum = currentSeq;
+            
+            if (currentSeqNum == '2076') {
+                 currentSeq = 'N2076'
+            }
+            
+            if (currentSeqNum == '106') {
+                 currentSeq = 'N106'
+            }
+            
+            if (currentSeqNum == '424') {
+                 currentSeq = 'N424'
+            }
+            
+            if (currentSeqNum == '848') {
+                 currentSeq = 'N848'
+            }
+            
+            if (currentSeqNum == '1696') {
+                 currentSeq = 'N1696'
+            }
+            
+            console.log(currentSeq);
+            if (currentSeq.match(/^(N106|INTRO)$/)) {
+                newVid = "bg1";
+            } else if (currentSeq.match(/^(N2076)$/)) {
+                newVid = "bg7";
+            } else if (currentSeq.match(/^(JVJ 24)$/)) {
+                newVid = "bg8";
+            } else if (currentSeq.match(/^(JVJ I|JVJ III|JVJ IV|JVJ VI|JVJ VII|JVJ 6|JVJ 8|JVJ 8+6|JVJ 12|JVJ 16)$/)) {
+                newVid = "bg2";
+            } else if (currentSeq.match(/^(END|VII6|IV2|IV1|III4|I10|PVPADCRASH|N424|J VI+VII|A END)$/)){
+                newVid = "bg3";
+            } else if (currentSeq.match(/^(J606 PVINTRO|JVJ V|N848|N1696)$/)){
+                newVid = "bg4";
+            } else if (currentSeq.match(/^(A PIANO)$/)){
+                newVid = "bg5";
+            } else {
+                newVid = "bg6";
+            }
+        
+            var newVidClass = document.getElementsByClassName(newVid)[0];
+            
+            if ( document.getElementById("bgvisible").classList.contains(newVid)) {
+                console.log("Currently visible: " + newVid);
+            } else {
+                document.getElementById("bgvisible").id =""
+                newVidClass.id="bgvisible"
+                console.log("Changing to: " + newVid);
+            }
+            
+       }
+       
+       player.onSampleStart = function (offset, sample, buffer) {
+            
+            var A4 = document.getElementById('A4');
+            var B = document.getElementById('B');
+            var CS = document.getElementById('CS');
+            var D_PW_SW = document.getElementById('D_PW_SW');
+            var J60_JPAD = document.getElementById('J60_JPAD');
+            var JV = document.getElementById('JV');
+            var VC = document.getElementById('VC');
+            var Z = document.getElementById('Z');
+            var MS = document.getElementById('MS');
+            var R606 = document.getElementById('R606');
+            var COUNT1 = document.getElementById('COUNT1');
+            var P = document.getElementById('P');
+            var recCredits = document.getElementById('recCredits');
+            
+            if ((sample.substring(0, 2) == "A4")) {
+                A4.classList.add("creditVisible");
+            }
+            if ((sample.substring(0, 1) == "B")) {
+                B.classList.add("creditVisible");
+            }
+            if ((sample.substring(0, 2) == "CS")) {
+                CS.classList.add("creditVisible");
+            }
+            if ((sample.substring(0, 1) == "D")) {
+                D_PW_SW.classList.add("creditVisible");
+            }
+            if ((sample.substring(0, 2) == "PV")) {
+                D_PW_SW.classList.add("creditVisible");
+            }
+            if ((sample.substring(0, 2) == "SW")) {
+                D_PW_SW.classList.add("creditVisible");
+            }
+            if ((sample.substring(0, 3) == "J60")) {
+                J60_JPAD.classList.add("creditVisible");
+            }
+            if ((sample.substring(0, 4) == "JPAD")) {
+                J60_JPAD.classList.add("creditVisible");
+            }
+            if ((sample.substring(0, 2) == "JV")) {
+                JV.classList.add("creditVisible");
+            }
+            if ((sample.substring(0, 2) == "VC")) {
+                VC.classList.add("creditVisible");
+                recCredits.classList.add("creditVisible");
+            }
+            if ((sample.substring(0, 1) == "Z")) {
+                Z.classList.add("creditVisible");
+            }
+            if ((sample.substring(0, 2) == "MS")) {
+                MS.classList.add("creditVisible");
+            }
+            if ((sample.substring(0, 5) == "R606_")) {
+                R606.classList.add("creditVisible");
+            }
+            if ((sample.substring(0, 6) == "COUNT1")) {
+                COUNT1.classList.add("creditVisible");
+            } 
+            if ((sample.substring(0, 2) == "P_")) {
+                P.classList.add("creditVisible");
+                recCredits.classList.add("creditVisible");
+            }
+        }
+       
+        player.onSampleEnd = function (offset, sample, buffer) {
+            
+            var A4 = document.getElementById('A4');
+            var B = document.getElementById('B');
+            var CS = document.getElementById('CS');
+            var D_PW_SW = document.getElementById('D_PW_SW');
+            var J60_JPAD = document.getElementById('J60_JPAD');
+            var JV = document.getElementById('JV');
+            var VC = document.getElementById('VC');
+            var Z = document.getElementById('Z');
+            var MS = document.getElementById('MS');
+            var R606 = document.getElementById('R606');
+            var COUNT1 = document.getElementById('COUNT1');
+            var P = document.getElementById('P');
+            var recCredits = document.getElementById('recCredits');
+            var recCreditsExtra = recCredits;
+            
+            if ((sample.substring(0, 2) == "A4")) {
+            setTimeout(function(){
+                A4.classList.remove("creditVisible");
+            }, 500);
+            }
+            if ((sample.substring(0, 1) == "B")) {
+            setTimeout(function(){
+                B.classList.remove("creditVisible");
+            }, 500);
+            }
+            if ((sample.substring(0, 2) == "CS")) {
+                            setTimeout(function(){
+                CS.classList.remove("creditVisible");
+                            }, 500);
+            }
+            if ((sample.substring(0, 1) == "D")) {
+                            setTimeout(function(){
+                D_PW_SW.classList.remove("creditVisible");
+                            }, 500);
+            }
+            if ((sample.substring(0, 2) == "PV")) {
+                            setTimeout(function(){
+                D_PW_SW.classList.remove("creditVisible");
+                            }, 500);
+            }
+            if ((sample.substring(0, 2) == "SW")) {
+                            setTimeout(function(){
+                D_PW_SW.classList.remove("creditVisible");
+                            }, 500);
+            }
+            if ((sample.substring(0, 3) == "J60")) {
+                            setTimeout(function(){
+                J60_JPAD.classList.remove("creditVisible");
+                            }, 500);
+            }
+            if ((sample.substring(0, 4) == "JPAD")) {
+                            setTimeout(function(){
+                J60_JPAD.classList.remove("creditVisible");
+                            }, 500);
+            }
+            if ((sample.substring(0, 2) == "JV")) {
+                            setTimeout(function(){
+                JV.classList.remove("creditVisible");
+                            }, 500);
+            }
+            if ((sample.substring(0, 2) == "VC")) {
+                            setTimeout(function(){
+                VC.classList.remove("creditVisible");
+                            }, 500);
+                if ( recCredits.classList.contains("creditVisible")) {
+                        recCredits.classList.toggle("creditVisible");
+                    }
+            }
+            if ((sample.substring(0, 1) == "Z")) {
+                            setTimeout(function(){
+                Z.classList.remove("creditVisible");
+                            }, 500);
+            }
+            if ((sample.substring(0, 2) == "MS")) {
+                            setTimeout(function(){
+                MS.classList.remove("creditVisible");
+                            }, 500);
+            }
+            if ((sample.substring(0, 5) == "R606_")) {
+                            setTimeout(function(){
+                R606.classList.remove("creditVisible");
+                            }, 1000);
+            }
+            if ((sample.substring(0, 6) == "COUNT1")) {
+                            setTimeout(function(){
+                COUNT1.classList.remove("creditVisible");
+                            }, 500);
+            } 
+            if ((sample.substring(0, 2) == "P_")) {
+                            setTimeout(function(){
+                P.classList.remove("creditVisible");
+                            }, 500);
+                    if ( recCredits.classList.contains("creditVisible")) {
+                        recCredits.classList.toggle("creditVisible");
+                    }
+            }
+       }
+       
+    }
+}
+player.onWaiting = function () {
+}
+var playing = false;
+function randomElement(array) {
+    if (!array) return null;
+    if (array.length === 0) return null;
+    var index = Math.floor(Math.random() * array.length);
+    return array[index];
+}
+function imageClicked() {
+	if (ready) {
+		if (playing) {
+			player.stop();
+			playing = false;
+        } else {
+	        songUrl = randomElement(compositions);
+	        try {
+	            var request = new XMLHttpRequest();
+	            request.open('GET', songUrl, true);
+	            request.onload = function () {
+	                var song = JSON.parse(request.responseText);
+	                player.load(song, "http://dam.digi-front.com/TCH02/music/");
+                	setTimeout(function(){
+                    player.play();
+                    }, 160);
+	                playing = true;
+	            }
+	            request.send();
+	        }
+	        catch (e) {}
+		}
+	}
+}
+window.onload = function () {
+	ready = true;
+}
+</script>
+
+<style>
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
+    margin:0;
+    font-family: Helvetica;
+    font-size: 23px;
+    font-weight: 300;
+    line-height: 30px;
+    background-color:#F8F8F8;
+}
+
+img {
+max-width:100%;
+}
+
+.background {height: calc(100vh - 140px);width: calc(100vw - 140px);margin-left: 70px;position: fixed;text-align:center;overflow: hidden;margin-top: 70px;}
+
+	.fullscreen {
+	position:relative;
+	min-width: 100%;
+	min-height: 100%;
+	left: 50%;
+	top: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	}
+	#video {
+		z-index: 10;
+		background-color: #000000;
+	}
+	#image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+	#imagediv {
+		background: rgba(255,255,255,0.0);
+		border: 1px solid black;
+		z-index: 20;
+	}
+	
+	
+	.bg1 {
+	  opacity:0; 
+	  -webkit-transition:opacity 0.2s ease-out;
+	}
+	
+    .bg2 {
+	  opacity:0;  
+	  	  -webkit-transition:opacity 0.2s ease-out;
+	}
+	
+	.bg3 {
+	  opacity:0;  
+	  	  -webkit-transition:opacity 0.2s ease-out;
+	}
+	
+	.bg4 {
+	  opacity:0; 
+	  	  -webkit-transition:opacity 0.2s ease-out;
+	}
+	
+	.bg5 {
+	  opacity:0;  
+	  	  -webkit-transition:opacity 0.2s ease-out;
+	}
+	
+	.bg6 {
+	  opacity:0;  
+	  	  -webkit-transition:opacity 0.2s ease-out;
+	}
+	
+		.bg7 {
+	  opacity:0;  
+	  	  -webkit-transition:opacity 0.2s ease-out;
+	}
+	
+		.bg8 {
+	  opacity:0;  
+	  	  -webkit-transition:opacity 0.2s ease-out;
+	}
+	
+	#A4, #B,#CS, #D, #PV, #SW, #J60, #JPAD, #JV, #VC, #Z, #MS, #R606, #COUNT1, #P{
+
+	}
+	
+	.singlecredit div {
+color:#8A8989;
+	    transition:color 0.5s ease;
+	    -webkit-transition:color 0.5s ease;
+	}
+	
+	#recCredits {
+        color:#8A8989;
+        float: left;
+    margin: 0px 3px;
+	    transition:color 0.5s ease;
+	    -webkit-transition:color 0.5s ease;
+	}
+	
+	.creditVisible {
+	    color:#000000 !important;
+	}
+	
+	.fourth {
+	    width:auto;
+	    float:left;
+	    margin-right:20px;
+	}
+	
+	img.pause {
+    max-height: 100%;
+    cursor: pointer;
+    margin-top: 2%;
+	    opacity:0;
+	    transition:opacity 1s ease;
+	    -webkit-transition:opacity 1s ease;
+	}
+	
+	img.play {
+    position: absolute;
+    max-height: 100%;
+    cursor: pointer;
+    margin-top: 2%;
+	    opacity:0.4;
+	    transition:opacity 1s ease;
+	    -webkit-transition:opacity 1s ease;
+	}
+	
+	.playpause:hover .playpauseshown {
+	    opacity:1;
+	}
+	
+	.playpausehidden {
+	    opacity:0 !important;
+	}
+	.playpause {
+	     position: relative;
+    width: 350px;
+		margin:0 auto;
+  position: relative;
+  top: calc(50% + 15px);
+  transform: translateY(-50%);
+	}
+
+	
+	#bgvisible {
+	    opacity:1;
+	}
+	
+.rightmargin {
+height: 130px;
+    position: absolute;
+    width: 100%;
+    margin: 10px;
+    padding-top: 26px;
+    text-align: center;
+    z-index: 4;
+    background: black;
+    width: 130px;
+    border-radius: 50%;	}
+	
+	.rightmargin img {
+		max-width:80px;	
+	}
+
+.bottommargin {
+    height: auto;
+    width: 100%;
+    bottom: 0;
+    position: fixed;
+    padding: 10px 0px;
+}
+
+
+.centermargin {
+width:100px;
+    text-align:center;
+    margin:0 auto;
+    padding-top:0px;
+    margin-bottom:100px;
+}
+.centermargin img {
+max-width:100%;	
+}
+
+	
+.TCH {
+    text-transform:uppercase;
+}
+
+.IS {
+	display:none;
+	position:absolute;
+	width:100%;
+	bottom:13vh;
+	font-size: 28px;
+	text-align:center;
+    	font-family: 'Pinyon Script', cursive;
+}
+
+
+a {
+    color:#8A8989;
+    text-decoration:none;
+}
+	a:hover {
+	color:black;
+	}
+
+#credits {
+    font-style: italic;
+    display: inline;
+    color:#c0c0c0;
+    transition: color 0.5s ease-in-out;
+    -webkit-transition: color 0.5s ease-in-out;
+}
+
+
+.columns {
+width:60%;
+margin:0 auto;
+}
+
+.halfcol {
+font-size: 10px;
+line-height: 16px;
+float: left;
+color:#8A8989;
+padding:0px 10px;
+}
+
+html, body { 
+height: 100%; 
+}
+
+
+.responsive-embed {
+	height: calc(100vh - 140px);
+	width: calc(100vw - 140px);
+	  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+	}
+
+.ratio {
+  height: 100%;
+  width: auto; 
+  visibility: hidden; 
+  text-align: left;
+}
+
+.responsive-embed .embed {
+  position: absolute !important;
+  top: 0 !important; left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+	
+.backgroundBlurry {
+position:fixed;
+	height:100%;
+	width:100%;
+	z-index:-999;
+	opacity:0.2;
+	-webkit-filter: blur(15px);
+    filter: blur(15px);
+}
+	
+#slideshow { 
+    position: relative; 
+    width: 200px; 
+    height: 60px; 
+}
+
+#slideshow > div { 
+    position: absolute; 
+    top: 10px; 
+    left: 10px; 
+    right: 10px; 
+    bottom: 10px; 
+}	
+	
+</style>
+
+</head>
+<body valign="top">
+
+        
+        <div class="rightmargin">
+		<img src="http://dam.digi-front.com/TCH02/TCH_Logo_White.png">
+        </div>
+        
+<div class="background" style="z-index:999">
+<div class="responsive-embed">
+                <div class="playpause" onclick="imageClicked()">
+            <img class="play playpauseshown" id="play" src="transp_play_large.png">
+            <img class="pause playpausehidden" id="pause" src="transp_stop.png">
+            </div>
+  <img class="ratio" src="http://jonasersland.net/TropicalContactHigh/ratio.png" alt="4X3" />
+  
+</div>
+</div>
+  
+        
+         <div class="background bg2" id="">
+                    <video class="fullscreen" autoplay="true" loop="true">
+		                <source src="BEAT.webm">
+	                </video>
+         </div>
+         
+         <div class="background bg3" id="">
+                    <video class="fullscreen" autoplay="true" loop="true">
+		                <source src="BOBLING.webm">
+	                </video>
+         </div>
+         
+                  <div class="background bg4" id="">
+                    <video class="fullscreen" autoplay="true" loop="true">
+		                <source src="HYPNOTISK.webm">
+	                </video>
+         </div>
+         
+                  <div class="background bg5" id="">
+                    <video class="fullscreen" autoplay="true" loop="true">
+		                <source src="PIANO.webm">
+	                </video>
+         </div>
+         
+                  <div class="background bg6" id="">
+                    <video class="fullscreen" autoplay="true" loop="true">
+		                <source src="SYNTHPAD.webm">
+	                </video>
+         </div>
+                           <div class="background bg7" id="">
+                    <video class="fullscreen" autoplay="true" loop="true">
+		                <source src="PULSE2.webm">
+	                </video>
+         </div>
+                           <div class="background bg8" id="">
+                    <video class="fullscreen" autoplay="true" loop="true">
+		                <source src="PULSE3.webm">
+	                </video>
+         </div>
+         
+         <div class="background bg1" id="bgvisible">
+             	    <video class="fullscreen" autoplay="true" loop="true">
+		                <source src="VENTESKJERM.webm">
+	                </video>
+         </div>
+	
+         
+	<div class="IS">Initial Structure</div>
+
+        
+        <div class="bottommargin">
+		<div style="margin:0 auto;width:1150px;">
+ <div class="halfcol" style="width: 39px;margin-top: 7px;height: auto;margin-right: 10px;float: left;padding: 0;"><img src="http://jonasersland.net/TropicalContactHigh/TCH02_2.png"></div>
+ 
+                        <div class="halfcol" style="width:auto;min-width:500px;border-right: thin solid silver;border-left: thin solid silver;">
+				The Digital Aleatoric Music (DAM) format from Digital Frontier allows this digital release to sound different every time it's played.</div>
+			
+			<div class="halfcol" id="slideshow">
+				<div>Music composed by Tropical Contact High.</div>
+			<div>Code by Rune Botten and Are Meisfjord.</div>
+			<div>Video by Stan Stencil.</div>
+			<div>Web by Jonas Ersland.</div>
+			<div>Recorded and mixed at Street Pulse Studio, Berlin and Malabar Studio B, Oslo by Tropical Contact High.</div>
+                        </div>
+			</div>
+			</div>
+             </div>
+            </div>
+        </div>
+         <div class="backgroundBlurry">
+             	    <video class="fullscreen" autoplay="true" loop="true">
+		                <source src="VENTESKJERM.webm">
+	                </video>
+         </div>
+<script>
+$(document).ready(function(){
+$("#slideshow > div:gt(0)").hide();
+
+setInterval(function() { 
+  $('#slideshow > div:first')
+    .fadeOut(1000)
+    .next()
+    .fadeIn(1000)
+    .end()
+    .appendTo('#slideshow');
+},  3000);
+});
+</script>
+</body>
+</html>
