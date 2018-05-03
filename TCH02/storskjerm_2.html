@@ -21,7 +21,9 @@ player.onEnded = function () {
     document.querySelector('div.bg1').id = 'bgvisible';
     document.querySelector('div.sc').classList.remove('creditVisible');
 };
+	
 $(document).ready(function(){
+    $('.everything').fadeIn();
     $(".playpause").click(function() {
     $('img.pause').toggleClass("playpauseshown");
     $('img.play').toggleClass("playpauseshown");
@@ -314,8 +316,10 @@ body {
     line-height: 30px;
     background-color:#F8F8F8;
 	-webkit-font-smoothing:antialiased;
-	display:none;
 }
+	.everything {
+	display:none;
+	}
 
 img {
 max-width:100%;
@@ -609,7 +613,7 @@ position:fixed;
 </style>
 
 </head>
-<body valign="top">
+<body valign="top" class="everything">
         <div class="tittel">Initial Structure</div>
         <div class="rightmargin">
 		<img src="http://dam.digi-front.com/TCH02/TCH_Logo_White.png">
@@ -705,11 +709,7 @@ position:fixed;
 		                <source src="VENTESKJERM.webm">
 	                </video>
          </div>
-<script>
-	
-$(document).ready(function() {
-    $(body).fadeIn();
-});	
+<script>	
 	
 $(document).ready(function(){
 $("#slideshow > div:gt(0)").hide();
