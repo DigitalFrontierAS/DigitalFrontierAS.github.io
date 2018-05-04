@@ -319,8 +319,13 @@ body {
     background-color:#F8F8F8;
 	-webkit-font-smoothing:antialiased;
 }
-	.everything {
-	display:none;
+
+.teppe {
+position:fixed;
+	width:100vw;
+	height:100vh;
+	background:white;
+	z-index:9999;
 	}
 
 img {
@@ -622,7 +627,8 @@ text-align:right;
 </style>
 
 </head>
-<body valign="top" class="everything">
+<body valign="top">
+	<div class="teppe"></div>
         <div class="tittel">Initial Structure</div>
         <div class="rightmargin">
 		<img src="http://dam.digi-front.com/TCH02/TCH_Logo_White.png">
@@ -722,7 +728,7 @@ text-align:right;
          </div>
 <script>
 $( window ).on( "load", function() {
-     $('.everything').fadeIn(1000);
+     $('.teppe').fadeOut(1000);
 });
 	
 $(document).ready(function(){
