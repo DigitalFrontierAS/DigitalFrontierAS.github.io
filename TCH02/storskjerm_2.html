@@ -7,10 +7,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	
 <script type="text/javascript">
-$( window ).on( "load", function() {
-     $(body).fadeIn(1000);
-});
-	
 /* global DigitalFrontierAS */
 var player = new DigitalFrontierAS.Player();
 var compositions = ["http://dam.digi-front.com/TCH02/music/TCH02606.json"];
@@ -724,7 +720,10 @@ text-align:right;
 		                <source src="VENTESKJERM.webm">
 	                </video>
          </div>
-<script>	
+<script>
+$( window ).on( "load", function() {
+     $('.everything').fadeIn(1000);
+});
 	
 $(document).ready(function(){
 $("#slideshow > div:gt(0)").hide();
