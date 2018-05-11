@@ -25,6 +25,12 @@ player.onEnded = function () {
     document.querySelector('div.sc').classList.remove('creditVisible');
 };
 	
+window.onload = function(e){ 
+  context.resume().then(() => {
+    console.log('Playback resumed successfully');
+  });
+});
+	
 $(document).ready(function(){
     $(".playpause").click(function() {
     $('img.pause').toggleClass("playpauseshown");
