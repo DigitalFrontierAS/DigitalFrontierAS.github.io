@@ -15,15 +15,9 @@ var DigitalFrontierAS = (function () {
             loadAheadOffset = 0.0,
             compressorNode,
             destination,
-<<<<<<< .merge_file_a11020
-            
-            // This variable holds...
-            run = null,
-=======
             extensions,
 
             loop = null,
->>>>>>> .merge_file_a02188
 
             LOAD_AHEAD_TIME_MAX = 10.0,
             LOAD_AHEAD_TIME_MIN = 1.0,
@@ -32,13 +26,10 @@ var DigitalFrontierAS = (function () {
 
         this.composition = null;
 
-<<<<<<< .merge_file_a11020
-=======
         this.currentSequence = null;
         this.currentSequenceCounter = 0;
         this.currentSequenceRevolutions = 0;
 
->>>>>>> .merge_file_a02188
         //this.ended = false; // TODO
         this.playing = false;
         this.waiting = true;
@@ -369,15 +360,9 @@ var DigitalFrontierAS = (function () {
                 firstTime = false;
                 scheduleRun();
                 return;
-<<<<<<< .merge_file_a11020
-            } 
-            if (!run) return;
-            let nextOffset = run.nextOffset;
-=======
             }
             if (!loop) return;
             let nextOffset = loop.nextOffset;
->>>>>>> .merge_file_a02188
             if (nextOffset && nextOffset - player.currentTime() < LOAD_AHEAD_TIME_MAX) {
                 let counter = run.counter;
                 counter++;
@@ -395,14 +380,11 @@ var DigitalFrontierAS = (function () {
                     scheduleRun();
                 } else {
                     // Nothing more to play
-<<<<<<< .merge_file_a11020
-=======
                     player.schedule(nextOffset, function () {
                         player.currentSequence = null;
                         player.currentSequenceCounter = 0;
                         player.currentSequenceRevolutions = 0;
                     });
->>>>>>> .merge_file_a02188
                     player.schedule(duration, finish);
                     player.loadComplete = true;
                 }
@@ -426,7 +408,6 @@ var DigitalFrontierAS = (function () {
                 // This should only happen the very first run, in case of "prelude"
                 run.offset -= layout[0].time;
             }
-<<<<<<< .merge_file_a11020
             let offset = run.offset;
             
             let nextOffset = offset + sequence.numBeats * 60.0 / sequence.bpm; // Next sequence starts here
@@ -440,20 +421,6 @@ var DigitalFrontierAS = (function () {
             // Schedule sequence end event
             player.schedule(nextOffset, function () {
                 if (player.onSequenceEnd) player.onSequenceEnd(nextOffset, currentRun.sequenceName, currentRun.counter, currentRun.revolutions); 
-=======
-            let offset = loop.offset;
-
-            let nextOffset = offset + sequence.numBeats * 60.0 / sequence.bpm; // Next sequence starts here
-            let currentLoop = loop;
-            player.schedule(offset, function () {
-                player.currentSequence = currentLoop.sequenceName;
-                player.currentSequenceCounter = currentLoop.counter;
-                player.currentSequenceRevolutions = currentLoop.revolutions;
-                if (player.onSequenceStart) player.onSequenceStart(offset, currentLoop.sequenceName, currentLoop.counter, currentLoop.revolutions);
-            });
-            player.schedule(nextOffset, function () {
-                if (player.onSequenceEnd) player.onSequenceEnd(nextOffset, currentLoop.sequenceName, currentLoop.counter, currentLoop.revolutions);
->>>>>>> .merge_file_a02188
             });
             
             // 
