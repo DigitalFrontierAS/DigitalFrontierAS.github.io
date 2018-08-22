@@ -119,7 +119,7 @@ var DigitalFrontierAS = (function () {
         }
 
 
-        function nextRun(offset, sequenceName) {
+        function nextLoop(offset, sequenceName) {
             if (!offset) offset = 0;
             let revolutions = 0;
             let sequence;
@@ -238,6 +238,10 @@ var DigitalFrontierAS = (function () {
         };
 
         this.play = function () {
+            this.currentSequence = null;
+            this.currentSequenceCounter = 0;
+            this.currentSequenceRevolutions = 0;
+
             this.ended = false;
             this.waiting = true;
             this.loadComplete = false;
@@ -256,7 +260,7 @@ var DigitalFrontierAS = (function () {
             //destination = context.destination;
 
             startTime = context.currentTime;
-            run = null;
+            loop = null;
             firstTime = true;
             loadAheadOffset = 0.0;
             loadAhead();
@@ -356,28 +360,28 @@ var DigitalFrontierAS = (function () {
         function loadAhead() {
             if (!player.playing) return;
             if (firstTime) {
-                run = nextRun();
+                loop = nextLoop();
                 firstTime = false;
-                scheduleRun();
+                scheduleLoop();
                 return;
             }
             if (!loop) return;
             let nextOffset = loop.nextOffset;
             if (nextOffset && nextOffset - player.currentTime() < LOAD_AHEAD_TIME_MAX) {
-                let counter = run.counter;
+                let counter = loop.counter;
                 counter++;
-                if (counter == run.revolutions) {
-                    run = nextRun(nextOffset, run.sequenceName);
+                if (counter == loop.revolutions) {
+                    loop = nextLoop(nextOffset, loop.sequenceName);
                 } else {
-                    run = {
+                    loop = {
                         offset: nextOffset,
-                        sequenceName: run.sequenceName,
-                        revolutions: run.revolutions,
+                        sequenceName: loop.sequenceName,
+                        revolutions: loop.revolutions,
                         counter: counter
                     };
                 }
-                if (run) {
-                    scheduleRun();
+                if (loop) {
+                    scheduleLoop();
                 } else {
                     // Nothing more to play
                     player.schedule(nextOffset, function () {
@@ -396,37 +400,34 @@ var DigitalFrontierAS = (function () {
 
 
         // ------------------------------------------------------------------------------------------------
-        // Scheduling - placing samples and events on the audio context timeline. Asynchronous stuff.
+        // Scheduling
         // ------------------------------------------------------------------------------------------------
 
-        function scheduleRun() {
-            let sequence = sequences[run.sequenceName];
+        function scheduleLoop() {
+            let sequence = sequences[loop.sequenceName];
 
             let layout = layOutSequence(sequence);
 
-            if (run.offset + layout[0].time < 0.0) {
-                // This should only happen the very first run, in case of "prelude"
-                run.offset -= layout[0].time;
+            if (loop.offset + layout[0].time < 0.0) {
+                // This should only happen the very first loop, in case of "prelude"
+                loop.offset -= layout[0].time;
             }
-            let offset = run.offset;
-            
+            let offset = loop.offset;
+
             let nextOffset = offset + sequence.numBeats * 60.0 / sequence.bpm; // Next sequence starts here
-            let currentRun = run;
-            
-            // Schedule sequence start event
+            let currentLoop = loop;
             player.schedule(offset, function () {
-                if (player.onSequenceStart) player.onSequenceStart(offset, currentRun.sequenceName, currentRun.counter, currentRun.revolutions);
+                player.currentSequence = currentLoop.sequenceName;
+                player.currentSequenceCounter = currentLoop.counter;
+                player.currentSequenceRevolutions = currentLoop.revolutions;
+                if (player.onSequenceStart) player.onSequenceStart(offset, currentLoop.sequenceName, currentLoop.counter, currentLoop.revolutions);
             });
-            
-            // Schedule sequence end event
             player.schedule(nextOffset, function () {
-                if (player.onSequenceEnd) player.onSequenceEnd(nextOffset, currentRun.sequenceName, currentRun.counter, currentRun.revolutions); 
+                if (player.onSequenceEnd) player.onSequenceEnd(nextOffset, currentLoop.sequenceName, currentLoop.counter, currentLoop.revolutions);
             });
-            
-            // 
             scheduleLayout(layout, offset, function () {
                 loadAheadOffset = Math.max(loadAheadOffset, nextOffset);
-                currentRun.nextOffset = nextOffset;
+                currentLoop.nextOffset = nextOffset;
             });
         }
 
