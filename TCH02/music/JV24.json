@@ -1,0 +1,36 @@
+﻿{
+  "name": "JV24",
+  "start": [
+    "JV24"
+  ],
+  "sequences": [
+    {
+      "name": "JV24",
+      "bpm": 106,
+      "maxRevolutions": 100,
+      "minRevolutions": 100,
+      "numBeats": 24,
+      "next": [
+        "8LOOP1"
+      ],
+      "groups": [
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "JV24_1.wav",
+            "JV24_2.wav",
+            "JV24_3.wav",
+            "JV24_4.wav",
+            "JV24_5.wav",
+            "JV24_1X.wav",
+            "JV24_2X.wav",
+            "JV24_3X.wav",
+            "JV24_4X.wav",
+            "JV24_5X.wav"
+          ]
+        }
+      ]
+    }
+  ]
+}

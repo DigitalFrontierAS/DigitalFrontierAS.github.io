@@ -1,0 +1,65 @@
+﻿{
+  "name": "TCH02",
+  "start": [
+    "VII"
+  ],
+  "sequences": [
+    {
+      "name": "VII",
+      "bpm": 106,
+      "maxRevolutions": 160,
+      "minRevolutions": 120,
+      "numBeats": 2,
+      "next": [
+        ""
+      ],
+      "groups": [
+        {
+          "beat": 1,
+          "samples": [
+            "J6024I1.wav",
+            "J6024I2.wav",
+            "J6024I3.wav",
+            "J6024I4.wav",
+            "J6024I5.wav",
+            "J6024I6.wav",
+            "J6024I7.wav",
+            "J6024I8.wav",
+            "J6024I9.wav",
+            "J6024I10.wav",
+            "J6024III1.wav",
+            "J6024III2.wav",
+            "J6024III3.wav",
+            "J6024III4.wav",
+            "J6024III5.wav",
+            "J6024III6.wav",
+            "J6024III7.wav",
+            "J6024III8.wav",
+            "J6024III9.wav",
+            "J6024III10.wav",
+            "J6024IV1.wav",
+            "J6024IV2.wav",
+            "J6024IV3.wav",
+            "J6024TIV4.wav",
+            "J6024IV5.wav",
+            "J6024IV6.wav",
+            "J6024IV7.wav",
+            "J6024IV8.wav",
+            "J6024IV9.wav",
+            "J6024IV10.wav",
+            "J6024VII1.wav",
+            "J6024VII2.wav",
+            "J6024VII3.wav",
+            "J6024VII4.wav",
+            "J6024VII5.wav",
+            "J6024VII6.wav",
+            "J6024VII7.wav",
+            "J6024VII8.wav",
+            "J6024VII9.wav",
+            "J6024VII10.wav"
+          ]
+        }
+      ]
+    }
+  ]
+}

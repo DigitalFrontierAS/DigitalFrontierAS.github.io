@@ -1,0 +1,160 @@
+﻿{
+  "name": "JV8+6 12",
+  "start": [
+    "JV8+6"
+  ],
+  "sequences": [
+    {
+      "name": "JV8+6",
+      "bpm": 106,
+      "maxRevolutions": 2,
+      "minRevolutions": 6,
+      "numBeats": 14,
+      "next": [
+        "JV8"
+      ],
+      "groups": [
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "JV8_1.wav",
+            "JV8_2.wav",
+            "JV8_3.wav",
+            "JV8_4.wav",
+            "JV8_5.wav",
+            "JV8_1X.wav",
+            "JV8_2X.wav",
+            "JV8_3X.wav",
+            "JV8_4X.wav",
+            "JV8_5X.wav"
+          ]
+        },
+        {
+          "gain": 1,
+          "beat": 9,
+          "samples": [
+            "JV6_1.wav",
+            "JV6_2.wav",
+            "JV6_3.wav",
+            "JV6_4.wav",
+            "JV6_5.wav",
+            "JV6_1X.wav",
+            "JV6_2X.wav",
+            "JV6_3X.wav",
+            "JV6_4X.wav",
+            "JV6_5X.wav"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "JV8",
+      "bpm": 106,
+      "maxRevolutions": 2,
+      "minRevolutions": 2,
+      "numBeats": 8,
+      "next": [
+        "JV12"
+      ],
+      "groups": [
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "JV8_1.wav",
+            "JV8_2.wav",
+            "JV8_3.wav",
+            "JV8_4.wav",
+            "JV8_5.wav",
+            "JV8_1X.wav",
+            "JV8_2X.wav",
+            "JV8_3X.wav",
+            "JV8_4X.wav",
+            "JV8_5X.wav"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "JV6",
+      "bpm": 106,
+      "maxRevolutions": 2,
+      "minRevolutions": 2,
+      "numBeats": 6,
+      "next": [
+        "JV12"
+      ],
+      "groups": [
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "JV6_1.wav",
+            "JV6_2.wav",
+            "JV6_3.wav",
+            "JV6_4.wav",
+            "JV6_5.wav",
+            "JV6_1X.wav",
+            "JV6_2X.wav",
+            "JV6_3X.wav",
+            "JV6_4X.wav",
+            "JV6_5X.wav"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "JV12",
+      "bpm": 106,
+      "maxRevolutions": 1,
+      "minRevolutions": 1,
+      "numBeats": 12,
+      "next": [
+        "JV8+6",
+        "JV24"
+      ],
+      "groups": [
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "JV12_1.wav",
+            "JV12_2.wav",
+            "JV12_3.wav",
+            "JV12_4.wav",
+            "JV12_5.wav"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "JV24",
+      "bpm": 106,
+      "maxRevolutions": 6,
+      "minRevolutions": 1,
+      "numBeats": 24,
+      "next": [
+        "JV8+6"
+      ],
+      "groups": [
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "JV24_1.wav",
+            "JV24_2.wav",
+            "JV24_3.wav",
+            "JV24_4.wav",
+            "JV24_5.wav",
+            "JV24_1X.wav",
+            "JV24_2X.wav",
+            "JV24_3X.wav",
+            "JV24_4X.wav",
+            "JV24_5X.wav"
+          ]
+        }
+      ]
+    }
+  ]
+}

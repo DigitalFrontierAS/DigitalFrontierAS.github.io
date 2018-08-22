@@ -1,0 +1,288 @@
+﻿{
+  "name": "JV16",
+  "start": [
+    "JVJ IV"
+  ],
+  "sequences": [
+    {
+      "name": "JV16",
+      "bpm": 106,
+      "maxRevolutions": 100,
+      "minRevolutions": 100,
+      "numBeats": 16,
+      "next": [
+        "8LOOP1"
+      ],
+      "groups": [
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "JV16_I1.wav",
+            "JV16_I2.wav",
+            "JV16_I3.wav",
+            "JV16_I4.wav",
+            "JV16_I5.wav",
+            "JV16_I1X.wav",
+            "JV16_I2X.wav",
+            "JV16_I3X.wav",
+            "JV16_I4X.wav",
+            "JV16_I5X.wav",
+            "JV16_III1.wav",
+            "JV16_III2.wav",
+            "JV16_III3.wav",
+            "JV16_III4.wav",
+            "JV16_III5.wav",
+            "JV16_III1X.wav",
+            "JV16_III2X.wav",
+            "JV16_III3X.wav",
+            "JV16_III4X.wav",
+            "JV16_III5X.wav",
+            "JV16_IV1.wav",
+            "JV16_IV2.wav",
+            "JV16_IV3.wav",
+            "JV16_IV4.wav",
+            "JV16_IV5.wav",
+            "JV16_V1.wav",
+            "JV16_V2.wav",
+            "JV16_V3.wav",
+            "JV16_V4.wav",
+            "JV16_V5.wav",
+            "JV16_VI1.wav",
+            "JV16_VI2.wav",
+            "JV16_VI3.wav",
+            "JV16_VI4.wav",
+            "JV16_VI5.wav",
+            "JV16_VII1.wav",
+            "JV16_VII2.wav",
+            "JV16_VII3.wav",
+            "JV16_VII4.wav",
+            "JV16_VII5.wav"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "JVJ I",
+      "bpm": 106,
+      "maxRevolutions": 100,
+      "minRevolutions": 100,
+      "numBeats": 16,
+      "next": [
+        "8LOOP1"
+      ],
+      "groups": [
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "JV16_I1.wav",
+            "JV16_I2.wav",
+            "JV16_I3.wav",
+            "JV16_I4.wav",
+            "JV16_I5.wav",
+            "JV16_I1X.wav",
+            "JV16_I2X.wav",
+            "JV16_I3X.wav",
+            "JV16_I4X.wav",
+            "JV16_I5X.wav"
+          ]
+        },
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "J60248I1.wav",
+            "J60248I2.wav",
+            "J60248I3.wav",
+            "J60248I4.wav"
+          ]
+        },
+        {
+          "gain": 2,
+          "beat": 9,
+          "samples": [
+            "J60BITI1.wav",
+            "J60BITI2.wav",
+            "J60BITI3.wav",
+            "J60BITI4.wav",
+            "J60BITI5.wav",
+            "J60BITI6.wav",
+            "J60BITI7.wav",
+            "J60BITI8.wav",
+            "J60BITI9.wav",
+            "J60BITI10.wav",
+            "J60BITIII1.wav",
+            "J60BITIII2.wav",
+            "J60BITIII3.wav",
+            "J60BITIII4.wav",
+            "J60BITIII5.wav",
+            "J60BITIII6.wav",
+            "J60BITIII7.wav",
+            "J60BITIII8.wav",
+            "J60BITIII9.wav",
+            "J60BITIII10.wav",
+            "J60BITIV1.wav",
+            "J60BITIV2.wav",
+            "J60BITIV3.wav",
+            "J60BITIV4.wav",
+            "J60BITIV5.wav",
+            "J60BITIV6.wav",
+            "J60BITIV7.wav",
+            "J60BITIV8.wav",
+            "J60BITIV9.wav",
+            "J60BITIV10.wav",
+            "J60BITVII1.wav",
+            "J60BITVII2.wav",
+            "J60BITVII3.wav",
+            "J60BITVII4.wav",
+            "J60BITVII5.wav",
+            "J60BITVII6.wav",
+            "J60BITVII7.wav",
+            "J60BITVII8.wav",
+            "J60BITVII9.wav",
+            "J60BITVII10.wav"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "JVJ III",
+      "bpm": 106,
+      "maxRevolutions": 100,
+      "minRevolutions": 100,
+      "numBeats": 16,
+      "next": [
+        "8LOOP1"
+      ],
+      "groups": [
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "JV16_III1.wav",
+            "JV16_III2.wav",
+            "JV16_III3.wav",
+            "JV16_III4.wav",
+            "JV16_III5.wav"
+          ]
+        },
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "J60248III1.wav",
+            "J60248III2.wav",
+            "J60248III3.wav",
+            "J60248III4.wav"
+          ]
+        },
+        {
+          "gain": 2,
+          "beat": 9,
+          "samples": [
+            "J60BITIII1.wav",
+            "J60BITIII2.wav",
+            "J60BITIII3.wav",
+            "J60BITIII4.wav",
+            "J60BITIII5.wav",
+            "J60BITIII6.wav",
+            "J60BITIII7.wav",
+            "J60BITIII8.wav",
+            "J60BITIII9.wav",
+            "J60BITIII10.wav",
+            "J60BITIV1.wav",
+            "J60BITIV2.wav",
+            "J60BITIV3.wav",
+            "J60BITIV4.wav",
+            "J60BITIV5.wav",
+            "J60BITIV6.wav",
+            "J60BITIV7.wav",
+            "J60BITIV8.wav",
+            "J60BITIV9.wav",
+            "J60BITIV10.wav",
+            "J60BITVII1.wav",
+            "J60BITVII2.wav",
+            "J60BITVII3.wav",
+            "J60BITVII4.wav",
+            "J60BITVII5.wav",
+            "J60BITVII6.wav",
+            "J60BITVII7.wav",
+            "J60BITVII8.wav",
+            "J60BITVII9.wav",
+            "J60BITVII10.wav"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "JVJ IV",
+      "bpm": 106,
+      "maxRevolutions": 100,
+      "minRevolutions": 100,
+      "numBeats": 16,
+      "next": [
+        "8LOOP1"
+      ],
+      "groups": [
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "JV16_IV1.wav",
+            "JV16_IV2.wav",
+            "JV16_IV3.wav",
+            "JV16_IV4.wav",
+            "JV16_IV5.wav"
+          ]
+        },
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "J60248IV1.wav",
+            "J60248IV2.wav",
+            "J60248IV3.wav",
+            "J60248IV4.wav"
+          ]
+        },
+        {
+          "gain": 2,
+          "beat": 9,
+          "samples": [
+            "J60BITIII1.wav",
+            "J60BITIII2.wav",
+            "J60BITIII3.wav",
+            "J60BITIII4.wav",
+            "J60BITIII5.wav",
+            "J60BITIII6.wav",
+            "J60BITIII7.wav",
+            "J60BITIII8.wav",
+            "J60BITIII9.wav",
+            "J60BITIII10.wav",
+            "J60BITIV1.wav",
+            "J60BITIV2.wav",
+            "J60BITIV3.wav",
+            "J60BITIV4.wav",
+            "J60BITIV5.wav",
+            "J60BITIV6.wav",
+            "J60BITIV7.wav",
+            "J60BITIV8.wav",
+            "J60BITIV9.wav",
+            "J60BITIV10.wav",
+            "J60BITVII1.wav",
+            "J60BITVII2.wav",
+            "J60BITVII3.wav",
+            "J60BITVII4.wav",
+            "J60BITVII5.wav",
+            "J60BITVII6.wav",
+            "J60BITVII7.wav",
+            "J60BITVII8.wav",
+            "J60BITVII9.wav",
+            "J60BITVII10.wav"
+          ]
+        }
+      ]
+    }
+  ]
+}

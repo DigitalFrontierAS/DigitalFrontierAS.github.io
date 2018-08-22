@@ -1,0 +1,270 @@
+﻿{
+  "compressor": {
+    "threshold": -1,
+    "knee": 40,
+    "ratio": 1,
+    "attack": 0.1,
+    "release": 0.25
+  },
+  "name": "PVPAD",
+  "start": [
+    "J6024"
+  ],
+  "sequences": [
+    {
+      "name": "J6024",
+      "bpm": 106,
+      "maxRevolutions": 120,
+      "minRevolutions": 4,
+      "numBeats": 2,
+      "next": [
+        "PVPAD1"
+      ],
+      "groups": [
+        {
+          "beat": 1,
+          "samples": [
+            "J6024IV2.wav",
+            "J6024IV3.wav",
+            "J6024IV4.wav",
+            "J6024IV6.wav",
+            "J6024IV7.wav",
+            "J6024IV8.wav",
+            "J6024IV9.wav",
+            "J6024IV10.wav",
+            "J6024VII1.wav",
+            "J6024VII2.wav",
+            "J6024VII3.wav",
+            "J6024VII4.wav",
+            "J6024VII5.wav",
+            "J6024VII6.wav"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PVPADCRASH",
+      "bpm": 106,
+      "maxRevolutions": 1,
+      "minRevolutions": 1,
+      "numBeats": 2,
+      "next": [
+        "J6024"
+      ],
+      "groups": [
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "PVPADCRASH.wav"
+          ]
+        },
+        {
+          "beat": 1,
+          "samples": [
+            "J6024IV2.wav",
+            "J6024IV3.wav",
+            "J6024IV4.wav",
+            "J6024IV6.wav",
+            "J6024IV7.wav",
+            "J6024IV8.wav",
+            "J6024IV9.wav",
+            "J6024IV10.wav",
+            "J6024VII1.wav",
+            "J6024VII2.wav",
+            "J6024VII3.wav",
+            "J6024VII4.wav",
+            "J6024VII5.wav",
+            "J6024VII6.wav"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PVPAD1",
+      "bpm": 106,
+      "maxRevolutions": 1,
+      "minRevolutions": 1,
+      "numBeats": 2,
+      "next": [
+        "PVPAD2"
+      ],
+      "groups": [
+        {
+          "gain": 1.3,
+          "beat": 1,
+          "samples": [
+            "PVPAD1.wav",
+            "PVPAD2.wav"
+          ]
+        },
+        {
+          "beat": 1,
+          "samples": [
+            "J6024IV2.wav",
+            "J6024IV3.wav",
+            "J6024IV4.wav",
+            "J6024IV6.wav",
+            "J6024IV7.wav",
+            "J6024IV8.wav",
+            "J6024IV9.wav",
+            "J6024IV10.wav",
+            "J6024VII1.wav",
+            "J6024VII2.wav",
+            "J6024VII3.wav",
+            "J6024VII4.wav",
+            "J6024VII5.wav",
+            "J6024VII6.wav",
+            "J6024III1.wav",
+            "J6024III2.wav",
+            "J6024III3.wav",
+            "J6024III4.wav",
+            "J6024III5.wav",
+            "J6024III6.wav",
+            "J6024III7.wav",
+            "J6024III8.wav",
+            "J6024III9.wav"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PVPAD2",
+      "bpm": 212,
+      "maxRevolutions": 62,
+      "minRevolutions": 62,
+      "numBeats": 2,
+      "next": [
+        "PVPAD3"
+      ],
+      "groups": [
+        {
+          "beat": 1,
+          "samples": [
+            "J6024IV4.wav",
+            "J6024IV6.wav",
+            "J6024IV7.wav",
+            "J6024IV8.wav",
+            "J6024IV9.wav",
+            "J6024VII1.wav",
+            "J6024VII2.wav",
+            "J6024VII3.wav",
+            "J6024VII4.wav",
+            "J6024VII5.wav",
+            "J6024VII6.wav",
+            "J6024III3.wav",
+            "J6024III5.wav",
+            "J6024III6.wav",
+            "J6024III7.wav",
+            "J6024III8.wav",
+            "J6024III9.wav"
+          ]
+        },
+        {
+          "gain": 0.5,
+          "beat": 2,
+          "samples": [
+            "J6024IV4.wav",
+            "J6024IV6.wav",
+            "J6024IV7.wav",
+            "J6024IV8.wav",
+            "J6024IV9.wav",
+            "J6024VII1.wav",
+            "J6024VII2.wav",
+            "J6024VII3.wav",
+            "J6024VII4.wav",
+            "J6024VII5.wav",
+            "J6024VII6.wav",
+            "J6024III3.wav",
+            "J6024III5.wav",
+            "J6024III6.wav",
+            "J6024III7.wav",
+            "J6024III8.wav",
+            "J6024III9.wav",
+            {
+              "value": "S.wav",
+              "probability": 50
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PVPAD3",
+      "bpm": 212,
+      "maxRevolutions": 20,
+      "minRevolutions": 20,
+      "numBeats": 2,
+      "next": [
+        "PVPAD4"
+      ],
+      "groups": [
+        {
+          "beat": 1,
+          "samples": [
+            "J6024I1.wav",
+            "J6024I2.wav",
+            "J6024I3.wav",
+            "J6024I4.wav",
+            "J6024I5.wav",
+            "J6024I6.wav",
+            "J6024I7.wav",
+            "J6024I8.wav",
+            "J6024I9.wav",
+            "J6024I10.wav"
+          ]
+        },
+        {
+          "gain": 0.5,
+          "beat": 2,
+          "samples": [
+            "J6024I1.wav",
+            "J6024I2.wav",
+            "J6024I3.wav",
+            "J6024I4.wav",
+            "J6024I5.wav",
+            "J6024I6.wav",
+            "J6024I7.wav",
+            "J6024I8.wav",
+            "J6024I9.wav",
+            "J6024I10.wav",
+            {
+              "value": "S.wav",
+              "probability": 40
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PVPAD4",
+      "bpm": 212,
+      "maxRevolutions": 8,
+      "minRevolutions": 8,
+      "numBeats": 1,
+      "next": [
+        "PVPAD1",
+        "PVPADCRASH"
+      ],
+      "groups": [
+        {
+          "beat": 1,
+          "samples": [
+            "J6024I1.wav",
+            "J6024I4.wav",
+            "J6024I8.wav",
+            "J6024III1.wav",
+            "J6024III2.wav",
+            "J6024III3.wav",
+            "J6024III4.wav",
+            "J6024III5.wav",
+            "J6024III6.wav",
+            "J6024III7.wav",
+            "J6024III8.wav",
+            "J6024III9.wav"
+          ]
+        }
+      ]
+    }
+  ]
+}

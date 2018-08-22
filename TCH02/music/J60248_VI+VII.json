@@ -1,0 +1,94 @@
+﻿{
+  "name": "J60248_VI+VII",
+  "start": [
+    "VI+VII"
+  ],
+  "sequences": [
+    {
+      "name": "VI+VII",
+      "bpm": 106,
+      "maxRevolutions": 160,
+      "minRevolutions": 120,
+      "numBeats": 8,
+      "next": [
+        ""
+      ],
+      "groups": [
+        {
+          "gain": 0.5,
+          "beat": 1,
+          "samples": [
+            "J60248I1.wav",
+            "J60248I2.wav",
+            "J60248I3.wav",
+            "J60248I4.wav",
+            "J60248III1.wav",
+            "J60248III2.wav",
+            "J60248III3.wav",
+            "J60248III4.wav",
+            "J60248IV1.wav",
+            "J60248IV2.wav",
+            "J60248IV3.wav",
+            "J60248IV4.wav",
+            {
+              "value": "J60248VI1.wav",
+              "probability": 10
+            },
+            {
+              "value": "J60248VI2.wav",
+              "probability": 10
+            },
+            {
+              "value": "J60248VI3.wav",
+              "probability": 10
+            },
+            {
+              "value": "J60248VI2.wav",
+              "probability": 10
+            },
+            {
+              "value": "J60248VII1.wav",
+              "probability": 10
+            },
+            {
+              "value": "J60248VII2.wav",
+              "probability": 10
+            },
+            {
+              "value": "J60248VII3.wav",
+              "probability": 10
+            },
+            {
+              "value": "J60248VII4.wav",
+              "probability": 10
+            },
+            "J60248X1.wav",
+            "J60248X2.wav",
+            "J60248X3.wav",
+            "J60248X4.wav"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "END",
+      "bpm": 106,
+      "maxRevolutions": 1,
+      "minRevolutions": 1,
+      "nextAfter": 60,
+      "numBeats": 8,
+      "next": [
+        ""
+      ],
+      "groups": [
+        {
+          "gain": 0.5,
+          "beat": 1,
+          "samples": [
+            "S.wav"
+          ]
+        }
+      ]
+    }
+  ]
+}
