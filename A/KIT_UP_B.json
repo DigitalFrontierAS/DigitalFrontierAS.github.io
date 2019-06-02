@@ -1,0 +1,113 @@
+﻿{
+  "compressor": {
+    "threshold": 0,
+    "knee": 30,
+    "ratio": 0,
+    "attack": 0.1,
+    "release": 0.25
+  },
+  "name": "KIT_UP",
+  "start": [
+    "K_TWS_B"
+  ],
+  "sequences": [
+    {
+      "name": "K_TWS_B",
+      "bpm": 76.14,
+      "maxRevolutions": 50,
+      "minRevolutions": 50,
+      "numBeats": 16,
+      "next": [],
+      "groups": [
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "K_TWS_B1.wav",
+            "K_TWS_B2.wav",
+            "K_TWS_B3.wav",
+            "K_TWS_B4.wav",
+            "K_TWS_B5.wav",
+            "K_TWS_B6.wav",
+            "K_TWS_B7.wav",
+            "K_TWS_B8.wav",
+            "K_TWS_B9.wav",
+            "K_TWS_B10.wav",
+            "K_TWS_B11.wav",
+            "K_TWS_B12.wav",
+            "K_TWS_B13.wav",
+            "K_TWS_B14.wav",
+            "K_TWS_B15.wav",
+            "K_TWS_B16.wav"
+          ]
+        },
+        {
+          "gain": 1,
+          "beat": 5,
+          "samples": [
+            "K_TWS_B1.wav",
+            "K_TWS_B2.wav",
+            "K_TWS_B3.wav",
+            "K_TWS_B4.wav",
+            "K_TWS_B5.wav",
+            "K_TWS_B6.wav",
+            "K_TWS_B7.wav",
+            "K_TWS_B8.wav",
+            "K_TWS_B9.wav",
+            "K_TWS_B10.wav",
+            "K_TWS_B11.wav",
+            "K_TWS_B12.wav",
+            "K_TWS_B13.wav",
+            "K_TWS_B14.wav",
+            "K_TWS_B15.wav",
+            "K_TWS_B16.wav"
+          ]
+        },
+        {
+          "gain": 1,
+          "beat": 9,
+          "samples": [
+            "K_TWS_B1.wav",
+            "K_TWS_B2.wav",
+            "K_TWS_B3.wav",
+            "K_TWS_B4.wav",
+            "K_TWS_B5.wav",
+            "K_TWS_B6.wav",
+            "K_TWS_B7.wav",
+            "K_TWS_B8.wav",
+            "K_TWS_B9.wav",
+            "K_TWS_B10.wav",
+            "K_TWS_B11.wav",
+            "K_TWS_B12.wav",
+            "K_TWS_B13.wav",
+            "K_TWS_B14.wav",
+            "K_TWS_B15.wav",
+            "K_TWS_B16.wav"
+          ]
+        },
+        {
+          "gain": 1,
+          "beat": 13,
+          "samples": [
+            "K_TWS_B1.wav",
+            "K_TWS_B2.wav",
+            "K_TWS_B3.wav",
+            "K_TWS_B4.wav",
+            "K_TWS_B5.wav",
+            "K_TWS_B6.wav",
+            "K_TWS_B7.wav",
+            "K_TWS_B8.wav",
+            "K_TWS_B9.wav",
+            "K_TWS_B10.wav",
+            "K_TWS_B11.wav",
+            "K_TWS_B12.wav",
+            "K_TWS_B13.wav",
+            "K_TWS_B14.wav",
+            "K_TWS_B15.wav",
+            "K_TWS_B16.wav"
+          ]
+        }
+      ]
+    }
+  ]
+}

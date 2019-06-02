@@ -1,0 +1,55 @@
+﻿{
+  "compressor": {
+    "threshold": 0,
+    "knee": 30,
+    "ratio": 0,
+    "attack": 0.1,
+    "release": 0.25
+  },
+  "name": "K_T",
+  "start": [
+    "K_T"
+  ],
+  "sequences": [
+    {
+      "name": "K_T",
+      "bpm": 76.14,
+      "maxRevolutions": 50,
+      "minRevolutions": 50,
+      "numBeats": 4,
+      "next": [],
+      "groups": [
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "K_T1.wav",
+            "K_T2.wav",
+            "K_T3.wav",
+            "K_T4.wav",
+            "K_T5.wav",
+            "K_TW1.wav",
+            "K_TW2.wav",
+            "K_TW3.wav",
+            "K_TW4.wav",
+            "K_TW5.wav",
+            "K_TW6.wav",
+            "K_TW7.wav",
+            "K_TW8.wav",
+            "K_TW9.wav",
+            "K_TW10.wav",
+            "K_TW11.wav",
+            "K_TW12.wav",
+            "K_TW13.wav",
+            "K_TW14.wav",
+            "K_TWG1.wav",
+            "K_TWG2.wav",
+            "K_TWG3.wav",
+            "K_TWG4.wav",
+            "K_TWG5.wav"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+﻿{
+  "compressor": {
+    "threshold": 0,
+    "knee": 30,
+    "ratio": 0,
+    "attack": 0.1,
+    "release": 0.25
+  },
+  "name": "K_T",
+  "start": [
+    "K_T"
+  ],
+  "sequences": [
+    {
+      "name": "K_T",
+      "bpm": 76.14,
+      "maxRevolutions": 25,
+      "minRevolutions": 20,
+      "numBeats": 4,
+      "next": [],
+      "groups": [
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "K_T1.wav",
+            "K_T2.wav",
+            "K_T3.wav",
+            "K_T4.wav",
+            "K_T5.wav"
+          ]
+        }
+      ]
+    }
+  ]
+}
