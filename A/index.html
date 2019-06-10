@@ -26,7 +26,7 @@ var ready = false;
 
 player.onEnded = function () {
 	var image = document.getElementById("image");
-    image.src = "playCROP.png";
+	image.src = "/TCH02/playCROP.png";
 	image.style.display = "block";
 	playing = false;
 	var video = document.getElementById("video");
@@ -36,23 +36,23 @@ player.onEnded = function () {
 player.onPlaying = function () {
 	var image = document.getElementById("image");
 	var video = document.getElementById("video");
-    
-    var isPlaying = video.currentTime > 0 && !video.paused && !video.ended && video.readyState > 2;
+	
+	var isPlaying = video.currentTime > 0 && !video.paused && !video.ended && video.readyState > 2;
 
-    if (!isPlaying) {
-        video.play();
-        image.style.display = "none";
-        ga('send', 'event', 'DAM', 'wait-resume', songUrl);
-    }
+	if (!isPlaying) {
+		video.play();
+		image.style.display = "none";
+		ga('send', 'event', 'DAM', 'wait-resume', songUrl);
+	}
 }
 
 player.onWaiting = function () {
 	var image = document.getElementById("image");
 	var video = document.getElementById("video");
 	video.pause();
-  image.src = "/TCH02/loading.gif";
+	image.src = "/TCH02/loading.gif";
 	image.style.display = "block";
-  ga('send', 'event', 'DAM', 'wait', songUrl);
+	ga('send', 'event', 'DAM', 'wait', songUrl);
 }
 
 var playing = false;
@@ -71,7 +71,7 @@ function imageClicked() {
 		var video = document.getElementById("video");
 		if (playing) {
 			player.stop();
-			image.src = "playCROP.png";
+			image.src = "/TCH02/playCROP.png";
 			image.style.display = "block";
 			playing = false;
 			video.pause();
