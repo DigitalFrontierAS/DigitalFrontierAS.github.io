@@ -1,0 +1,152 @@
+<html>
+<head>
+<script src="/js-client/player.js" ></script>
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-105814598-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+    
+<script>
+
+/* global DigitalFrontierAS */
+var player = new DigitalFrontierAS.Player();
+
+var compositions = ["IT_DOWN.json", "KIT_UP_B.json", "KOMP WIP.json", "K_T.json", "WIP.json"];
+    
+var songUrl = "";
+
+var ready = false;
+
+player.onEnded = function () {
+	var image = document.getElementById("image");
+    image.src = "playCROP.png";
+	image.style.display = "block";
+	playing = false;
+	var video = document.getElementById("video");
+	video.pause();
+};
+
+player.onPlaying = function () {
+	var image = document.getElementById("image");
+	var video = document.getElementById("video");
+    
+    var isPlaying = video.currentTime > 0 && !video.paused && !video.ended && video.readyState > 2;
+
+    if (!isPlaying) {
+        video.play();
+        image.style.display = "none";
+        ga('send', 'event', 'DAM', 'wait-resume', songUrl);
+    }
+}
+
+player.onWaiting = function () {
+	var image = document.getElementById("image");
+	var video = document.getElementById("video");
+	video.pause();
+  image.src = "/TCH02/loading.gif";
+	image.style.display = "block";
+  ga('send', 'event', 'DAM', 'wait', songUrl);
+}
+
+var playing = false;
+
+function randomElement(array) {
+    if (!array) return null;
+    if (array.length === 0) return null;
+    var index = Math.floor(Math.random() * array.length);
+    return array[index];
+}
+
+
+function imageClicked() {
+	if (ready) {
+		var image = document.getElementById("image");
+		var video = document.getElementById("video");
+		if (playing) {
+			player.stop();
+			image.src = "playCROP.png";
+			image.style.display = "block";
+			playing = false;
+			video.pause();
+            ga('send', 'event', 'DAM', 'stop', songUrl);
+        } else {
+	        songUrl = randomElement(compositions);
+	        try {
+	            var request = new XMLHttpRequest();
+	            request.open('GET', songUrl, true);
+	            request.onload = function () {
+	                var song = JSON.parse(request.responseText);
+	                player.load(song, "music/");
+	                var image = document.getElementById("image");
+	                image.src = "/TCH02/loading.gif";
+					image.style.display = "block";
+	                player.play();
+	                playing = true;
+	                video.currentTime = 0.0;
+	            }
+	            request.send();
+	        }
+	        catch (e) {}
+            ga('send', 'event', 'DAM', 'play', songUrl);
+		}
+	}
+}
+
+window.onload = function () {
+	var image = document.getElementById("image");
+	var video = document.getElementById("video");
+	image.src = "playCROP.png";
+	ready = true;
+}
+
+</script>
+
+<style>
+	.fullscreen {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		left: 0;
+		top: 0;
+	}
+	#video {
+		z-index: 10;
+		background-color: #cfacd6;
+	}
+	#image {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		width: 400px;
+		height: 400px;
+		text-align: center;
+    /*
+		vertical-align: middle;
+		display: table-cell;
+		text-align: center;
+		*/
+	}
+	#imagediv {
+		background: rgba(255,255,255,0.0);
+		border: 1px solid black;
+		z-index: 20;
+	}
+</style>
+
+</head>
+
+
+<body valign="top">
+	<div id="imagediv" class="fullscreen" onclick="imageClicked()"><img src="/TCH02/loading.gif" id="image"/></div>
+	<video id="video" class="fullscreen" loop="true">
+		<source src="/TCH02/musicVideo.mp4">
+	</video>
+</body>
+</html>
