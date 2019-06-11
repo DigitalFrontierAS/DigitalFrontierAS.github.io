@@ -83,8 +83,8 @@ function imageClicked() {
 	            request.open('GET', songUrl, true);
 	            request.onload = function () {
 	                var song = JSON.parse(request.responseText);
-	                //player.load(song, "music/");
-	                player.load(song);
+	                player.load(song, "/A/");
+	                //player.load(song);
 	                var image = document.getElementById("image");
 	                image.src = "/TCH02/loading.gif";
 					image.style.display = "block";
