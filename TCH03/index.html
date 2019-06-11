@@ -26,7 +26,7 @@ var ready = false;
 
 player.onEnded = function () {
 	var image = document.getElementById("image");
-	image.src = "/TCH02/playCROP.png";
+	image.src = "play-button.svg";
 	image.style.display = "block";
 	playing = false;
 	var video = document.getElementById("video");
@@ -71,7 +71,7 @@ function imageClicked() {
 		var video = document.getElementById("video");
 		if (playing) {
 			player.stop();
-			image.src = "/TCH02/playCROP.png";
+			image.src = "play-button.svg";
 			image.style.display = "block";
 			playing = false;
 			video.pause();
@@ -125,12 +125,15 @@ window.onload = function () {
 		display: block;
 		margin-left: auto;
 		margin-right: auto;
-		width: 400px;
-		height: 400px;
+		width: 20vw;
+		height: 20vw;
 		text-align: center;
+		position: absolute;
+		top: calc(50% - 3vw);
+    	left: calc(50% - 10vw);
     /*
 		vertical-align: middle;
-		display: table-cell;
+		display: table-cell; 
 		text-align: center;
 		*/
 	}
@@ -147,7 +150,7 @@ window.onload = function () {
 <body valign="top">
 	<div id="imagediv" class="fullscreen" onclick="imageClicked()"><img src="/TCH02/loading.gif" id="image"/></div>
 	<video id="video" class="fullscreen" loop="true">
-		<source src="TCH03_01_komp.mp4">
+		<source src="/A/TCH03_01_komp.mp4">
 	</video>
 </body>
 </html>
