@@ -12,7 +12,78 @@
   ga('send', 'pageview');
 
 </script>
-    
+
+<script>
+
+var player = new DigitalFrontierAS.Player();
+
+player.onEnded = function () {
+	//var image = document.getElementById("image");
+	//image.src = "TROPICAL-GIF-creditzNY.gif";
+	playing = false;
+};
+
+function playSong() {
+	player.play();
+}
+
+function pauseSong() {
+	player.pause();
+}
+
+function resumeSong() {
+	player.resume();
+}
+
+function stopSong() {
+	player.stop();
+}
+
+function init() {
+	try {
+		var request = new XMLHttpRequest();
+		request.open('GET', "WIPmp3.json", true);
+		request.onload = function () {
+			var song = JSON.parse(request.responseText);
+			player.load(song, "/A/");
+			//var image = document.getElementById("image");
+			//image.src = "TCH-COLOUR.gif";
+			ready = true;
+		}
+		request.send();
+	}
+	catch (e) {}
+}
+
+var ready = false;
+var playing = false;
+
+function videoClicked() {
+	if (!ready) return;
+	
+	//var image = document.getElementById("image");
+	if (playing) {
+		//image.src = "TROPICAL-GIF-creditzNY.gif";
+		player.stop();
+		playing = false;
+	} else {
+		//image.src = "TCH-COLOUR.gif";
+		player.play();
+		playing = true;
+	}
+}
+
+  /**
+   * append message to debug message window
+   * @param {string} message A message string
+   */
+  function appendMessage(message) {
+	console.log(message);
+	var dw = document.getElementById('debugmessage');
+	dw.innerHTML += '\n' + JSON.stringify(message);
+  }
+</script>
+
 <style>
 	.fullscreen {
 		position: fixed;
@@ -22,42 +93,20 @@
 		top: 0;
 	}
 	#video {
-		z-index: 10;
 		background-color: #000;
-	}
-	#image {
-		display: block;
-		margin-left: auto;
-		margin-right: auto;
-		width: 20vw;
-		height: 20vw;
-		text-align: center;
-		position: absolute;
-		top: calc(50% - 3vw);
-		left: calc(50% - 10vw);
-    /*
-		vertical-align: middle;
-		display: table-cell; 
-		text-align: center;
-		*/
-	}
-	#imagediv {
-		background: rgba(200,200,200,0.0);
-		border: 1px solid black;
-		z-index: 20;
 	}
 </style>
 
 </head>
 
 
-<body valign="top">
+<body onload="init()" valign="top">
 	<!--
 	<video loop="loop" muted="muted" controls>
 	  <source src="http://dam.digi-front.com/TCH03/TCH01.mp4" />
 	</video>
 	-->
-	<video id="video" class="fullscreen" loop muted controls>
+	<video id="video" class="fullscreen" loop muted onclick="videoClicked()">
 		<source src="TCH01.mp4" />
 	</video>
 </body>
