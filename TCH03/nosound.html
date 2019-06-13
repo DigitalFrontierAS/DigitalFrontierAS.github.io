@@ -15,22 +15,20 @@
 
 <script>
 
-//var player = new DigitalFrontierAS.Player();
+var player = new DigitalFrontierAS.Player();
 
 var ready = false;
 var playing = false;
 
-/*
 player.onEnded = function () {
 	var video = document.getElementById("video");
 	video.pause();
 	video.currentTime = 0.0;
 	playing = false;
 };
-*/
 
 function playSong() {
-	//player.play();
+	player.play();
 	var video = document.getElementById("video");
 	video.currentTime = 0.0;
 	video.play();
@@ -38,15 +36,15 @@ function playSong() {
 }
 
 function pauseSong() {
-	//player.pause();
+	player.pause();
 }
 
 function resumeSong() {
-	//player.resume();
+	player.resume();
 }
 
 function stopSong() {
-	//player.stop();
+	player.stop();
 	var video = document.getElementById("video");
 	video.pause();
 	video.currentTime = 0.0;
@@ -59,7 +57,7 @@ function init() {
 		request.open('GET', "WIPmp3.json", true);
 		request.onload = function () {
 			var song = JSON.parse(request.responseText);
-			//player.load(song, "/A/");
+			player.load(song, "/A/");
 			ready = true;
 		}
 		request.send();
@@ -106,13 +104,13 @@ function videoClicked() {
 </head>
 
 
-<body valign="top">
+<body onload="init()" valign="top">
 	<!--
 	<video loop="loop" muted="muted" controls>
 	  <source src="http://dam.digi-front.com/TCH03/TCH01.mp4" />
 	</video>
 	-->
-	<video id="video" class="fullscreen" loop muted controls>
+	<video id="video" class="fullscreen" loop muted controls onclick="videoClicked()">
 		<source src="TCH01.mp4" />
 	</video>
 </body>
