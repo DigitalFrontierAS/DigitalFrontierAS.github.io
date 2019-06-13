@@ -1,0 +1,98 @@
+<html>
+<head>
+<script src="/js-client/player.js" ></script>
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-105814598-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+    
+<script>
+
+var player = new DigitalFrontierAS.Player();
+
+player.onEnded = function () {
+	var image = document.getElementById("image");
+	image.src = "TROPICAL-GIF-creditzNY.gif";
+	playing = false;
+};
+
+function playSong() {
+	player.play();
+}
+
+function pauseSong() {
+	player.pause();
+}
+
+function resumeSong() {
+	player.resume();
+}
+
+function stopSong() {
+	player.stop();
+}
+
+function init() {
+	try {
+		var request = new XMLHttpRequest();
+		request.open('GET', "/TCH03/WIPmp3.json", true);
+		request.onload = function () {
+			var song = JSON.parse(request.responseText);
+			player.load(song, "music/");
+			var image = document.getElementById("image");
+			image.src = "TCH-COLOUR.gif";
+			ready = true;
+		}
+		request.send();
+	}
+	catch (e) {}
+}
+
+var ready = false;
+var playing = false;
+
+function imageClicked() {
+	if (!ready) return;
+	
+	var image = document.getElementById("image");
+	if (playing) {
+		image.src = "TROPICAL-GIF-creditzNY.gif";
+		player.stop();
+		playing = false;
+	} else {
+		image.src = "TCH-COLOUR.gif";
+		player.play();
+		playing = true;
+	}
+}
+
+</script>
+
+
+</head>
+
+
+
+
+<body onload="init()" valign="top">
+
+	<!--<button is="google-cast-button"></button>-->
+
+	<img src="splash.jpg" style="width: 375px" id="image" onclick="imageClicked()"/>
+
+	
+    <!-- Debbugging output -->
+    <div style="margin:10px; visibility:hidden;">
+      <textarea rows="20" cols="70" id="debugmessage">
+      </textarea>
+    </div>
+
+</body>
+</html>
