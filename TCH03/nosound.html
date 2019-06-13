@@ -17,6 +17,9 @@
 
 var player = new DigitalFrontierAS.Player();
 
+var ready = false;
+var playing = false;
+
 player.onEnded = function () {
 	//var image = document.getElementById("image");
 	//image.src = "TROPICAL-GIF-creditzNY.gif";
@@ -25,6 +28,9 @@ player.onEnded = function () {
 
 function playSong() {
 	player.play();
+	var video = document.getElementById("video");
+	video.currentTime = 0.0;
+	playing = true;
 }
 
 function pauseSong() {
@@ -36,10 +42,14 @@ function resumeSong() {
 }
 
 function stopSong() {
+	var video = document.getElementById("video");
+	video.pause();
 	player.stop();
+	playing = false;
 }
 
 function init() {
+	/*
 	try {
 		var request = new XMLHttpRequest();
 		request.open('GET', "WIPmp3.json", true);
@@ -53,23 +63,18 @@ function init() {
 		request.send();
 	}
 	catch (e) {}
+	*/
 }
 
-var ready = false;
-var playing = false;
 
 function videoClicked() {
 	if (!ready) return;
 	
-	//var image = document.getElementById("image");
+	var video = document.getElementById("video");
 	if (playing) {
-		//image.src = "TROPICAL-GIF-creditzNY.gif";
-		player.stop();
-		playing = false;
+		stopSong();
 	} else {
-		//image.src = "TCH-COLOUR.gif";
-		player.play();
-		playing = true;
+		playSong()
 	}
 }
 
