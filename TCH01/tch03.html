@@ -45,7 +45,7 @@ function init() {
 		request.open('GET', "/TCH03/WIPmp3.json", true);
 		request.onload = function () {
 			var song = JSON.parse(request.responseText);
-			player.load(song, "music/");
+			player.load(song, "/A/");
 			var image = document.getElementById("image");
 			image.src = "TCH-COLOUR.gif";
 			ready = true;
@@ -73,6 +73,15 @@ function imageClicked() {
 	}
 }
 
+  /**
+   * append message to debug message window
+   * @param {string} message A message string
+   */
+  function appendMessage(message) {
+	console.log(message);
+	var dw = document.getElementById('debugmessage');
+	dw.innerHTML += '\n' + JSON.stringify(message);
+  }
 </script>
 
 
