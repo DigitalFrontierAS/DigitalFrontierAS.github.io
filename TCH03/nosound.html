@@ -53,6 +53,9 @@ function stopSong() {
 
 function init() {
 	try {
+		var video = document.getElementById("video");
+		video.autoplay = false;
+		video.currentTime = 0.0;
 		var request = new XMLHttpRequest();
 		request.open('GET', "WIPmp3.json", true);
 		request.onload = function () {
@@ -110,7 +113,7 @@ function videoClicked() {
 	  <source src="http://dam.digi-front.com/TCH03/TCH01.mp4" />
 	</video>
 	-->
-	<video id="video" class="fullscreen" loop muted controls onclick="videoClicked()">
+	<video id="video" class="fullscreen" poster="TCH03-poster.jpg" loop muted autoplay onclick="videoClicked()">
 		<source src="TCH01.mp4" />
 	</video>
 </body>
