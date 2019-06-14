@@ -100,9 +100,13 @@ function imageClicked() {
 }
 
 window.onload = function () {
-	var image = document.getElementById("image");
 	var video = document.getElementById("video");
+	video.autoplay = false;
+	video.currentTime = 0.0;
+	
+	var image = document.getElementById("image");
 	image.src = "playCROP.png";
+	
 	ready = true;
 }
 
@@ -145,7 +149,7 @@ window.onload = function () {
 
 <body valign="top">
 	<div id="imagediv" class="fullscreen" onclick="imageClicked()"><img src="loading.gif" id="image"/></div>
-	<video id="video" class="fullscreen" loop="true">
+	<video id="video" class="fullscreen" loop muted autoplay>
 		<source src="music/Video.mp4">
 	</video>
 </body>
