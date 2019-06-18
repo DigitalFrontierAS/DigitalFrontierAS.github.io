@@ -5,7 +5,7 @@ var DigitalFrontierAS = (function () {
     function Player(composition, baseUrl) {
         // Local, "private" variables
         let AudioContext = window.AudioContext || window.webkitAudioContext,
-            context = new AudioContext(),
+            context = null,
             startTime = null,
             sequences =  null,
             groups = null,
@@ -22,7 +22,7 @@ var DigitalFrontierAS = (function () {
             LOAD_AHEAD_TIME_MAX = 10.0,
             LOAD_AHEAD_TIME_MIN = 1.0,
 
-            TRIGGER_BUFFER = context.createBuffer(1, 1, context.sampleRate);
+            TRIGGER_BUFFER = null;
 
         this.composition = null;
 
@@ -247,9 +247,10 @@ var DigitalFrontierAS = (function () {
             this.loadComplete = false;
             this.playing = true;
 
-            if (context.state !== "closed") context.close();
+            if (context && context.state !== "closed") context.close();
             context = new AudioContext();
             context.suspend();
+            if (!TRIGGER_BUFFER) TRIGGER_BUFFER = context.createBuffer(1, 1, context.sampleRate);
 
             compressorNode = context.createDynamicsCompressor();
             compressorNode.connect(context.destination);
