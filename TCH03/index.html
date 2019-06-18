@@ -91,32 +91,28 @@ function imageClicked() {
 window.onload = function () {
   console.debug("window.onload");
 	var video = document.getElementById("video");
-  video.oncanplay = function () {
-    if (video.autoplay === false) return;
-    console.debug("video.oncanplay");
-    video.pause();
-    video.autoplay = false;
-    video.controls = false;
-  	video.currentTime = 0.0;
+  video.pause();
+  video.autoplay = false;
+  video.controls = false;
+	video.currentTime = 0.0;
 
-    songUrl = randomElement(compositions);
-    try {
-      var request = new XMLHttpRequest();
-      request.open('GET', songUrl, true);
-      request.onload = function () {
-        console.debug("request.onload");
-        var song = JSON.parse(request.responseText);
-        player.load(song, "/A/");
-        //player.load(song);
+  songUrl = randomElement(compositions);
+  try {
+    var request = new XMLHttpRequest();
+    request.open('GET', songUrl, true);
+    request.onload = function () {
+      console.debug("request.onload");
+      var song = JSON.parse(request.responseText);
+      player.load(song, "/A/");
+      //player.load(song);
 
-      	var image = document.getElementById("image");
-      	image.src = "play-button.svg";
-      	ready = true;
-      };
-      request.send();
-    }
-    catch (e) {}
-  };
+    	var image = document.getElementById("image");
+    	image.src = "play-button.svg";
+    	ready = true;
+    };
+    request.send();
+  }
+  catch (e) {}
 }
 
 </script>
