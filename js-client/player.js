@@ -340,13 +340,14 @@ var DigitalFrontierAS = (function () {
         function checkLoadAheadStatus() {
             if (!player.playing) return;
             if (player.loadComplete) return;
-            if (loadAheadOffset - player.currentTime() < LOAD_AHEAD_TIME_MIN) {
+            var loadAheadTime = loadAheadOffset - player.currentTime();
+            if (loadAheadTime < LOAD_AHEAD_TIME_MIN) {
                 if (!player.waiting) {
                     context.suspend();
                     player.waiting = true;
                     if (player.onWaiting) player.onWaiting();
                 }
-            } else if (player.waiting) {
+            } else if (player.waiting && loadAheadTime > 2 * LOAD_AHEAD_TIME_MIN) {
                 context.resume();
                 player.waiting = false;
                 if (player.onPlaying) player.onPlaying();
