@@ -1,224 +1,112 @@
 <html>
 <head>
-    <!--
-<script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1" ></script>
--->
 <script src="/js-client/player.js" ></script>
-    
+
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
+  /*global ga*/
   ga('create', 'UA-105814598-1', 'auto');
   ga('send', 'pageview');
-
 </script>
-    
+
 <script>
 
+/* global DigitalFrontierAS */
 var player = new DigitalFrontierAS.Player();
 
-player.onEnded = function () {
-	var image = document.getElementById("image");
-	image.src = "TCH03-splash.gif";
-	playing = false;
-};
+var compositions = ["WIPmp3.json"];
 
-function playSong() {
-	player.play();
-}
-
-function pauseSong() {
-	player.pause();
-}
-
-function resumeSong() {
-	player.resume();
-}
-
-function stopSong() {
-	player.stop();
-}
-
-function init() {
-	try {
-		var request = new XMLHttpRequest();
-		request.open('GET', "WIPmp3.json", true);
-		request.onload = function () {
-			var song = JSON.parse(request.responseText);
-			player.load(song, "/A/");
-			var image = document.getElementById("image");
-			image.src = "TCH03-splash.gif";
-			ready = true;
-		}
-		request.send();
-	}
-	catch (e) {}
-}
+var songUrl = "";
 
 var ready = false;
+
+player.onEnded = function () {
+	document.getElementById("poster").style.display = "block";
+	document.getElementById("playbutton").style.display = "block";
+	document.getElementById("video").style.display = "none";
+	document.getElementById("waiting").style.display = "none";
+};
+
+player.onPlaying = function () {
+	document.getElementById("poster").style.display = "none";
+	document.getElementById("playbutton").style.display = "none";
+	document.getElementById("video").style.display = "block";
+	document.getElementById("waiting").style.display = "none";
+	ga('send', 'event', 'DAM', 'wait-resume', songUrl); /*global ga*/
+};
+
+player.onWaiting = function () {
+	document.getElementById("poster").style.display = "block";
+	document.getElementById("playbutton").style.display = "none";
+	document.getElementById("video").style.display = "none";
+	document.getElementById("waiting").style.display = "block";
+	ga('send', 'event', 'DAM', 'wait', songUrl);
+};
+
 var playing = false;
 
-function imageClicked() {
-	if (!ready) return;
-	
-	var image = document.getElementById("image");
-	if (playing) {
-		image.src = "TCH03-splash.gif";
-		player.stop();
-		playing = false;
-	} else {
-		image.src = "TCH03-min.gif";
-		player.play();
-		playing = true;
-	}
+function randomElement(array) {
+    if (!array) return null;
+    if (array.length === 0) return null;
+    var index = Math.floor(Math.random() * array.length);
+    return array[index];
 }
 
 
-// Chromecast stuff
+function imageClicked() {
+	if (ready) {
+		var image = document.getElementById("image");
+		var video = document.getElementById("video");
+		if (playing) {
+			player.stop();
+			playing = false;
+			document.getElementById("poster").style.display = "block";
+			document.getElementById("playbutton").style.display = "block";
+			document.getElementById("video").style.display = "none";
+			document.getElementById("waiting").style.display = "none";
+			ga('send', 'event', 'DAM', 'stop', songUrl);
+		} else {
+			document.getElementById("poster").style.display = "block";
+			document.getElementById("playbutton").style.display = "none";
+			document.getElementById("video").style.display = "none";
+			document.getElementById("waiting").style.display = "block";
+      player.play();
+      playing = true;
+			ga('send', 'event', 'DAM', 'play', songUrl);
+		}
+	}
+}
 
-/*
-window['__onGCastApiAvailable'] = function(isAvailable) {
-	console.log("Hei! " + isAvailable);
-  if (isAvailable) {
-    initializeCastApi();
+window.onload = function () {
+  console.debug("window.onload");
+  //document.getElementById("waiting").style.display = "block";
+
+  songUrl = randomElement(compositions);
+  try {
+    var request = new XMLHttpRequest();
+    request.open('GET', songUrl, true);
+    request.onload = function () {
+      console.debug("request.onload");
+      var song = JSON.parse(request.responseText);
+      player.load(song, "/A/");
+      //player.load(song);
+
+			document.getElementById("poster").style.display = "block";
+			document.getElementById("video").style.display = "none";
+    	document.getElementById("waiting").style.display = "none";
+    	document.getElementById("playbutton").style.display = "block";
+    	ready = true;
+    };
+    request.send();
   }
-};
-
-
-initializeCastApi = function() {
-  cast.framework.CastContext.getInstance().setOptions({
-    receiverApplicationId: "F8F7D2ED",
-    autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
-  });
-  
-};
-*/
-
+  catch (e) {}
+}
 
 </script>
-
-<!--
-<script type="text/javascript">
-  var applicationID = "F8F7D2ED";
-  var namespace = 'urn:x-cast:com.google.cast.sample.helloworld';
-  var session = null;
-  /**
-   * Call initialization for Cast
-   */
-  if (!chrome.cast || !chrome.cast.isAvailable) {
-	setTimeout(initializeCastApi, 1000);
-  }
-  /**
-   * initialization
-   */
-  function initializeCastApi() {
-	var sessionRequest = new chrome.cast.SessionRequest(applicationID);
-	var apiConfig = new chrome.cast.ApiConfig(sessionRequest,
-	  sessionListener,
-	  receiverListener);
-	chrome.cast.initialize(apiConfig, onInitSuccess, onError);
-  }
-  /**
-   * initialization success callback
-   */
-  function onInitSuccess() {
-	appendMessage('onInitSuccess');
-  }
-  /**
-   * initialization error callback
-   */
-  function onError(message) {
-	appendMessage('onError: ' + JSON.stringify(message));
-  }
-  /**
-   * generic success callback
-   */
-  function onSuccess(message) {
-	appendMessage('onSuccess: ' + message);
-  }
-  /**
-   * callback on success for stopping app
-   */
-  function onStopAppSuccess() {
-	appendMessage('onStopAppSuccess');
-  }
-  /**
-   * session listener during initialization
-   */
-  function sessionListener(e) {
-	appendMessage('New session ID:' + e.sessionId);
-	session = e;
-	session.addUpdateListener(sessionUpdateListener);
-	session.addMessageListener(namespace, receiverMessage);
-  }
-  /**
-   * listener for session updates
-   */
-  function sessionUpdateListener(isAlive) {
-	var message = isAlive ? 'Session Updated' : 'Session Removed';
-	message += ': ' + session.sessionId;
-	appendMessage(message);
-	if (!isAlive) {
-	  session = null;
-	}
-  }
-  /**
-   * utility function to log messages from the receiver
-   * @param {string} namespace The namespace of the message
-   * @param {string} message A message string
-   */
-  function receiverMessage(namespace, message) {
-	appendMessage('receiverMessage: ' + namespace + ', ' + message);
-  }
-  /**
-   * receiver listener during initialization
-   */
-  function receiverListener(e) {
-	if(e === 'available') {
-	  appendMessage('receiver found');
-	}
-	else {
-	  appendMessage('receiver list empty');
-	}
-  }
-  /**
-   * stop app/session
-   */
-  function stopApp() {
-	session.stop(onStopAppSuccess, onError);
-  }
-  /**
-   * send a message to the receiver using the custom namespace
-   * receiver CastMessageBus message handler will be invoked
-   * @param {string} message A message string
-   */
-  function sendMessage(message) {
-	if (session != null) {
-	  session.sendMessage(namespace, message, onSuccess.bind(this, 'Message sent: ' + message),
-		onError);
-	}
-	else {
-	  chrome.cast.requestSession(function(e) {
-		  session = e;
-		  session.sendMessage(namespace, message, onSuccess.bind(this, 'Message sent: ' +
-			message), onError);
-		}, onError);
-	}
-  }
-  /**
-   * append message to debug message window
-   * @param {string} message A message string
-   */
-  function appendMessage(message) {
-	console.log(message);
-	var dw = document.getElementById('debugmessage');
-	dw.innerHTML += '\n' + JSON.stringify(message);
-  }
-</script>
--->
 
 <style>
 	.fullscreen {
@@ -228,26 +116,60 @@ initializeCastApi = function() {
 		left: 0;
 		top: 0;
 	}
+	#poster {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		width: 100%;
+		height: 56.226%;
+		text-align: center;
+		position: absolute;
+		z-index: 10;
+	}
 	#video {
-		background-color: #000;
+		display: none;
+		margin-left: auto;
+		margin-right: auto;
+		width: 100%;
+		height: 56.226%;
+		text-align: center;
+		position: absolute;
+		z-index: 0;
+	}
+	#playbutton {
+		display: none;
+		margin-left: auto;
+		margin-right: auto;
+		width: 100%;
+		height: 56.226%;
+		text-align: center;
+		position: absolute;
+		z-index: 20;
+	}
+	#waiting {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		width: 100%;
+		height: 56.226%;
+		text-align: center;
+		position: absolute;
+		z-index: 20;
+	}
+	#imagediv {
+		background: rgba(255,255,255,0.0);
 	}
 </style>
 
 </head>
 
 
-<body onload="init()" valign="top">
-
-	<!--<button is="google-cast-button"></button>-->
-
-	<img src="TCH03-splash.gif" class="fullscreen" id="image" onclick="imageClicked()"/>
-
-	
-    <!-- Debbugging output -->
-    <div style="margin:10px; visibility:hidden;">
-      <textarea rows="20" cols="70" id="debugmessage">
-      </textarea>
-    </div>
-
+<body valign="top">
+	<div id="imagediv" class="fullscreen" onclick="imageClicked()">
+		<img src="TCH03-poster.jpg" id="poster"/>
+		<img src="design6.gif" id="video"/>
+		<img src="play-knapp2.png" id="playbutton"/>
+		<img src="/TCH02/loading.gif" id="waiting"/>
+	</div>
 </body>
 </html>
