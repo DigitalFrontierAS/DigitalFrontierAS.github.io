@@ -112,56 +112,40 @@ window.onload = function () {
 <style>
 	body {
 		background: #101010;
+		margin: 0;
+		border: 0;
+		padding: 0;
 	}
 	.fullscreen {
-		position: fixed;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		width: 100%;
 		height: 100%;
-		left: 0;
-		top: 0;
 	}
 	#poster {
 		display: block;
-		margin-left: auto;
-		margin-right: auto;
 		width: 100%;
-		/*height: 56.226%;*/
-		text-align: center;
 		position: absolute;
 		z-index: 10;
 	}
 	#video {
 		display: none;
-		margin-left: auto;
-		margin-right: auto;
 		width: 100%;
-		/*height: 56.226%;*/
-		text-align: center;
 		position: absolute;
 		z-index: 0;
 	}
 	#playbutton {
 		display: none;
-		margin-left: auto;
-		margin-right: auto;
 		width: 100%;
-		/*height: 56.226%;*/
-		text-align: center;
 		position: absolute;
 		z-index: 20;
 	}
 	#waiting {
 		display: block;
-		margin-left: auto;
-		margin-right: auto;
-		width: 100%;
-		/*height: 56.226%;*/
-		text-align: center;
+		width: 30%;
 		position: absolute;
 		z-index: 20;
-	}
-	#imagediv {
-		background: rgba(255,255,255,0.0);
 	}
 </style>
 
