@@ -123,6 +123,9 @@ window.onload = function () {
 		width: 100%;
 		height: 100%;
 	}
+	.maximage {
+		max-width: calc(177.78vh);
+	}
 	#poster {
 		display: block;
 		width: 100%;
@@ -144,6 +147,7 @@ window.onload = function () {
 	#waiting {
 		display: block;
 		width: 30%;
+		max-width: calc(40vh);
 		position: absolute;
 		z-index: 20;
 	}
@@ -154,9 +158,9 @@ window.onload = function () {
 
 <body valign="top">
 	<div id="imagediv" class="fullscreen" onclick="imageClicked()">
-		<img src="TCH03-poster.jpg" id="poster"/>
-		<img src="design6.gif" id="video"/>
-		<img src="play-knapp2.png" id="playbutton"/>
+		<img src="TCH03-poster.jpg" id="poster" class="maximage"/>
+		<img src="design6.gif" id="video" class="maximage"/>
+		<img src="play-knapp2.png" id="playbutton" class="maximage"/>
 		<img src="/TCH02/loading.gif" id="waiting"/>
 	</div>
 </body>
