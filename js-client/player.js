@@ -10,6 +10,7 @@ var DigitalFrontierAS = (function () {
             sequences =  null,
             groups = null,
             nextAfter = null,
+            nextAfterIndex = 0,
             sampleCache = {},
             duration = 0.0,
             loadAheadOffset = 0.0,
@@ -33,7 +34,7 @@ var DigitalFrontierAS = (function () {
         //this.ended = false; // TODO
         this.playing = false;
         this.waiting = true;
-        this.loadComplete = false;
+        this.scheduleComplete = false;
         //this.readyState = 0; // TODO
 
         // Event handlers
@@ -84,7 +85,7 @@ var DigitalFrontierAS = (function () {
                     }
                 }
             }
-            nextAfter = nextAfter.sort(byTime).reverse();
+            nextAfter = nextAfter.sort(byTime);
             extensions = player.composition.extensions;
             if (!extensions) extensions = [];
         }
@@ -97,7 +98,7 @@ var DigitalFrontierAS = (function () {
             });
             if (context.state != "closed") context.close();
             player.playing = false;
-            player.loadComplete = false;
+            player.scheduleComplete = false;
         }
 
 
@@ -124,8 +125,8 @@ var DigitalFrontierAS = (function () {
             let revolutions = 0;
             let sequence;
             do {
-                if (nextAfter.length > 0 && nextAfter[nextAfter.length-1].time <= offset) {
-                    sequenceName = nextAfter.pop().sequenceName;
+                if (nextAfterIndex < nextAfter.length && nextAfter[nextAfterIndex].time <= offset) {
+                    sequenceName = nextAfter[nextAfterIndex++].sequenceName;
                 } else if (!sequenceName) {
                     sequenceName = randomElement(player.composition.start);
                 } else {
@@ -137,7 +138,7 @@ var DigitalFrontierAS = (function () {
                 sequence = sequences[sequenceName];
                 if (!sequence) throw Error("Could not find sequence '" + sequenceName + "'");
 
-                let nextAfterTime = nextAfter.length > 0 ? nextAfter[nextAfter.length-1].time - offset : Infinity;
+                let nextAfterTime = nextAfterIndex < nextAfter.length ? nextAfter[nextAfterIndex].time - offset : Infinity;
                 let divisibleBy = sequence.divisibleBy ? sequence.divisibleBy : 1;
                 if (nextAfterTime <= 0.0) {
                     revolutions = divisibleBy;
@@ -228,7 +229,7 @@ var DigitalFrontierAS = (function () {
             this.composition = composition;
             this.baseUrl = baseUrl;
             this.waiting = true;
-            this.loadComplete = false;
+            this.scheduleComplete = false;
             if (!baseUrl) baseUrl = "";
             baseUrl = baseUrl.trim();
             if (baseUrl.length > 0 && !baseUrl.endsWith("/")) baseUrl += "/";
@@ -244,7 +245,7 @@ var DigitalFrontierAS = (function () {
 
             this.ended = false;
             this.waiting = true;
-            this.loadComplete = false;
+            this.scheduleComplete = false;
             this.playing = true;
 
             if (context && context.state !== "closed") context.close();
@@ -264,6 +265,7 @@ var DigitalFrontierAS = (function () {
             loop = null;
             firstTime = true;
             loadAheadOffset = 0.0;
+            nextAfterIndex = 0;
             loadAhead();
         };
 
@@ -339,7 +341,7 @@ var DigitalFrontierAS = (function () {
 
         function checkLoadAheadStatus() {
             if (!player.playing) return;
-            if (player.loadComplete) return;
+            if (player.scheduleComplete) return;
             var loadAheadTime = loadAheadOffset - player.currentTime();
             if (loadAheadTime < LOAD_AHEAD_TIME_MIN) {
                 if (!player.waiting) {
@@ -392,7 +394,7 @@ var DigitalFrontierAS = (function () {
                         player.currentSequenceRevolutions = 0;
                     });
                     player.schedule(duration, finish);
-                    player.loadComplete = true;
+                    player.scheduleComplete = true;
                 }
             }
         }
