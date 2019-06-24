@@ -25,33 +25,26 @@ var songUrl = "";
 var ready = false;
 
 player.onEnded = function () {
-	var image = document.getElementById("image");
-	image.src = "play-button.svg";
-	image.style.display = "block";
+	document.getElementById("poster").style.display = "block";
+	document.getElementById("playbutton").style.display = "block";
+	document.getElementById("video").style.display = "none";
+	document.getElementById("waiting").style.display = "none";
 	playing = false;
-	var video = document.getElementById("video");
-	video.pause();
 };
 
 player.onPlaying = function () {
-	var image = document.getElementById("image");
-	var video = document.getElementById("video");
-
-	var isPlaying = video.currentTime > 0 && !video.paused && !video.ended && video.readyState > 2;
-
-	if (!isPlaying) {
-		video.play();
-		image.style.display = "none";
-		ga('send', 'event', 'DAM', 'wait-resume', songUrl); /*global ga*/
-	}
+	document.getElementById("poster").style.display = "none";
+	document.getElementById("playbutton").style.display = "none";
+	document.getElementById("video").style.display = "block";
+	document.getElementById("waiting").style.display = "none";
+	ga('send', 'event', 'DAM', 'wait-resume', songUrl); /*global ga*/
 };
 
 player.onWaiting = function () {
-	var image = document.getElementById("image");
-	var video = document.getElementById("video");
-	video.pause();
-	image.src = "/TCH02/loading.gif";
-	image.style.display = "block";
+	document.getElementById("poster").style.display = "block";
+	document.getElementById("playbutton").style.display = "none";
+	document.getElementById("video").style.display = "none";
+	document.getElementById("waiting").style.display = "block";
 	ga('send', 'event', 'DAM', 'wait', songUrl);
 };
 
@@ -71,18 +64,19 @@ function imageClicked() {
 		var video = document.getElementById("video");
 		if (playing) {
 			player.stop();
-			image.src = "play-button.svg";
-			image.style.display = "block";
 			playing = false;
-			video.pause();
+			document.getElementById("poster").style.display = "block";
+			document.getElementById("playbutton").style.display = "block";
+			document.getElementById("video").style.display = "none";
+			document.getElementById("waiting").style.display = "none";
 			ga('send', 'event', 'DAM', 'stop', songUrl);
 		} else {
-      var image = document.getElementById("image");
-      image.src = "/TCH02/loading.gif";
-      image.style.display = "block";
+			document.getElementById("poster").style.display = "block";
+			document.getElementById("playbutton").style.display = "none";
+			document.getElementById("video").style.display = "none";
+			document.getElementById("waiting").style.display = "block";
       player.play();
       playing = true;
-      video.currentTime = 0.0;
 			ga('send', 'event', 'DAM', 'play', songUrl);
 		}
 	}
@@ -90,11 +84,7 @@ function imageClicked() {
 
 window.onload = function () {
   console.debug("window.onload");
-	var video = document.getElementById("video");
-  video.pause();
-  video.autoplay = false;
-  video.controls = false;
-	video.currentTime = 0.0;
+  //document.getElementById("waiting").style.display = "block";
 
   songUrl = randomElement(compositions);
   try {
@@ -106,8 +96,10 @@ window.onload = function () {
       player.load(song, "/A/");
       //player.load(song);
 
-    	var image = document.getElementById("image");
-    	image.src = "play-button.svg";
+			document.getElementById("poster").style.display = "block";
+			document.getElementById("video").style.display = "none";
+    	document.getElementById("waiting").style.display = "none";
+    	document.getElementById("playbutton").style.display = "block";
     	ready = true;
     };
     request.send();
@@ -118,36 +110,45 @@ window.onload = function () {
 </script>
 
 <style>
+	body {
+		background: #101010;
+		margin: 0;
+		border: 0;
+		padding: 0;
+	}
 	.fullscreen {
-		position: fixed;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		width: 100%;
 		height: 100%;
-		left: 0;
-		top: 0;
+	}
+	.maximage {
+		max-width: calc(177.78vh);
+	}
+	#poster {
+		display: block;
+		width: 100%;
+		position: absolute;
+		z-index: 10;
 	}
 	#video {
-		z-index: 10;
-		background-color: #101010;
-	}
-	#image {
-		display: block;
-		margin-left: auto;
-		margin-right: auto;
-		width: 20vw;
-		height: 20vw;
-		text-align: center;
+		display: none;
+		width: 100%;
 		position: absolute;
-		top: calc(50% - 3vw);
-		left: calc(50% - 10vw);
-    	/*
-		vertical-align: middle;
-		display: table-cell;
-		text-align: center;
-		*/
+		z-index: 0;
 	}
-	#imagediv {
-		background: rgba(255,255,255,0.0);
-		/* border: 10px solid black; */
+	#playbutton {
+		display: none;
+		width: 100%;
+		position: absolute;
+		z-index: 20;
+	}
+	#waiting {
+		display: block;
+		width: 30%;
+		max-width: calc(40vh);
+		position: absolute;
 		z-index: 20;
 	}
 </style>
@@ -156,9 +157,11 @@ window.onload = function () {
 
 
 <body valign="top">
-	<div id="imagediv" class="fullscreen" onclick="imageClicked()"><img src="/TCH02/loading.gif" id="image"/></div>
-	<video id="video" class="fullscreen" loop muted autoplay>
-		<source src="TCH01.mp4" />
-	</video>
+	<div id="imagediv" class="fullscreen" onclick="imageClicked()">
+		<img src="Posternoplay.jpg" id="poster" class="maximage"/>
+		<img src="design6.gif" id="video" class="maximage"/>
+		<img src="play-knapp2.png" id="playbutton" class="maximage"/>
+		<img src="/TCH02/loading.gif" id="waiting"/>
+	</div>
 </body>
 </html>
