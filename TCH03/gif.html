@@ -18,7 +18,7 @@
 /* global DigitalFrontierAS */
 var player = new DigitalFrontierAS.Player();
 
-var compositions = ["WIPmp3.json"];
+var compositions = ["WIP_STARTTEST.json"];
 
 var songUrl = "";
 
@@ -75,12 +75,15 @@ function imageClicked() {
 			document.getElementById("playbutton").style.display = "none";
 			document.getElementById("video").style.display = "none";
 			document.getElementById("waiting").style.display = "block";
+      player.load(song, "/A/");
       player.play();
       playing = true;
 			ga('send', 'event', 'DAM', 'play', songUrl);
 		}
 	}
 }
+
+var song;
 
 window.onload = function () {
   console.debug("window.onload");
@@ -92,9 +95,12 @@ window.onload = function () {
     request.open('GET', songUrl, true);
     request.onload = function () {
       console.debug("request.onload");
+      song = JSON.parse(request.responseText);
+      /*
       var song = JSON.parse(request.responseText);
       player.load(song, "/A/");
       //player.load(song);
+      */
 
 			document.getElementById("poster").style.display = "block";
 			document.getElementById("video").style.display = "none";
