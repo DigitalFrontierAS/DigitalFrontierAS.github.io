@@ -369,7 +369,6 @@ var DigitalFrontierAS = (function () {
                 loop = nextLoop();
                 scheduleLoop();
                 firstTime = false;
-                return;
             }
             if (!loop) return;
             console.time('loadAhead');
