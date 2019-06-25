@@ -26,77 +26,35 @@
           "gain": 1,
           "beat": 1,
           "samples": [
-            "K_TWG1.wav",
-            "K_TWG2.wav",
-            "K_TWG3.wav",
-            "K_TWG4.wav",
-            "K_TWG5.wav"
+            "K_TWG1.wav"
           ]
         },
         {
           "gain": 1,
           "beat": 5,
           "samples": [
-            "K_TWG1.wav",
-            "K_TWG2.wav",
-            "K_TWG3.wav",
-            "K_TWG4.wav",
-            "K_TWG5.wav"
+            "K_TWG2.wav"
           ]
         },
         {
           "gain": 1,
           "beat": 9,
           "samples": [
-            "K_TWG1.wav",
-            "K_TWG2.wav",
-            "K_TWG3.wav",
-            "K_TWG4.wav",
-            "K_TWG5.wav"
+            "K_TWG3.wav"
           ]
         },
         {
           "gain": 1,
           "beat": 13,
           "samples": [
-            "K_TWG1.wav",
-            "K_TWG2.wav",
-            "K_TWG3.wav",
-            "K_TWG4.wav",
-            "K_TWG5.wav"
-          ]
-        },
-        {
-          "gain": 1,
-          "beat": 9,
-          "samples": [
-            "CHMS1.wav",
-            "CHMS2.wav",
-            "CHMS3.wav",
-            "CHMS4.wav",
-            "CHMS5.wav"
-          ]
-        },
-        {
-          "gain": 0.5,
-          "beat": 8,
-          "samples": [
-            "CHMS1.wav",
-            "CHMS2.wav",
-            "CHMS3.wav",
-            "CHMS4.wav",
-            "CHMS5.wav"
+            "K_TWG4.wav"
           ]
         },
         {
           "gain": 1,
           "beat": 1,
           "samples": [
-            "CHMS1.wav",
-            "CHMS2.wav",
-            "CHMS3.wav",
-            "CHMS4.wav",
-            "CHMS5.wav"
+            "CHMS1.wav"
           ]
         }
       ]
