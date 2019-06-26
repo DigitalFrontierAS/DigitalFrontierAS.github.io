@@ -61,10 +61,10 @@
     },
     {
       "name": "start",
-      "bpm": 76.14,
+      "bpm": 150,
       "maxRevolutions": 1,
       "minRevolutions": 1,
-      "numBeats": 2,
+      "numBeats": 1,
       "next": [
         "K_TWG"
       ],
