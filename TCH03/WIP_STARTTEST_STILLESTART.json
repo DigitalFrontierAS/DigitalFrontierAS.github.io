@@ -61,7 +61,7 @@
     },
     {
       "name": "start",
-      "bpm": 150,
+      "bpm": 500,
       "maxRevolutions": 1,
       "minRevolutions": 1,
       "numBeats": 1,
