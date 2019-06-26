@@ -263,7 +263,7 @@ var DigitalFrontierAS = (function () {
 
             //destination = context.destination;
 
-            startTime = context.currentTime + 2.0;
+            startTime = context.currentTime + 1.0;
             loop = null;
             firstTime = true;
             loadAheadOffset = 0.0;
