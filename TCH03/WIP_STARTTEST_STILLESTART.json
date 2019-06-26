@@ -1,0 +1,82 @@
+﻿{
+  "compressor": {
+    "threshold": -29,
+    "knee": 30,
+    "ratio": 11,
+    "attack": 0.2,
+    "release": 0.1
+  },
+  "name": "KIT_UP",
+  "extensions": [
+    ".mp3"
+  ],
+  "start": [
+    "start"
+  ],
+  "sequences": [
+    {
+      "name": "K_TWG",
+      "bpm": 76.14,
+      "maxRevolutions": 1,
+      "minRevolutions": 1,
+      "numBeats": 16,
+      "next": [],
+      "groups": [
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "K_TWG1.wav"
+          ]
+        },
+        {
+          "gain": 1,
+          "beat": 5,
+          "samples": [
+            "K_TWG2.wav"
+          ]
+        },
+        {
+          "gain": 1,
+          "beat": 9,
+          "samples": [
+            "K_TWG3.wav"
+          ]
+        },
+        {
+          "gain": 1,
+          "beat": 13,
+          "samples": [
+            "K_TWG4.wav"
+          ]
+        },
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "CHMS1.wav"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "start",
+      "bpm": 76.14,
+      "maxRevolutions": 1,
+      "minRevolutions": 1,
+      "numBeats": 2,
+      "next": [
+        "K_TWG"
+      ],
+      "groups": [
+        {
+          "gain": 1,
+          "beat": 1,
+          "samples": [
+            "s.wav"
+          ]
+        }
+      ]
+    }
+  ]
+}
