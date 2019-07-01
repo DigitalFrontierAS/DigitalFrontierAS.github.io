@@ -49,7 +49,7 @@ var DigitalFrontierAS = (function () {
         this.onSequenceStart = null;
         this.onSequenceEnd = null;
         this.onGroupStart = null;
-        this.onSampleStart = null;
+        this.onSampleStart = null; // (offs, sample, buffer)
         this.onSampleEnd = null;
         this.onBeat = null;
 
@@ -121,7 +121,7 @@ var DigitalFrontierAS = (function () {
 
 
         function nextLoop(offset, sequenceName) {
-            console.time('nextLoop');
+            //console.time('nextLoop');
             if (!offset) offset = 0;
             let revolutions = 0;
             let sequence;
@@ -151,7 +151,7 @@ var DigitalFrontierAS = (function () {
                 }
             } while (revolutions === 0);
 
-            console.timeEnd('nextLoop');
+            //console.timeEnd('nextLoop');
             return {
                 offset: offset,
                 sequenceName: sequenceName,
@@ -162,6 +162,7 @@ var DigitalFrontierAS = (function () {
 
 
         function finish() {
+            console.log("finish()");
             tearDown();
             if (player.onEnded) player.onEnded();
         }
@@ -241,34 +242,36 @@ var DigitalFrontierAS = (function () {
         };
 
         this.play = function () {
-            this.currentSequence = null;
-            this.currentSequenceCounter = 0;
-            this.currentSequenceRevolutions = 0;
-
-            this.ended = false;
-            this.waiting = true;
-            this.scheduleComplete = false;
-            this.playing = true;
-
             if (context && context.state !== "closed") context.close();
             context = new AudioContext();
-            context.suspend();
-            if (!TRIGGER_BUFFER) TRIGGER_BUFFER = context.createBuffer(1, 1, context.sampleRate);
-
-            compressorNode = context.createDynamicsCompressor();
-            compressorNode.connect(context.destination);
-
-            destination = compressorNode;
-            this.refreshCompressor(this.composition.compressor);
-
-            //destination = context.destination;
-
-            startTime = context.currentTime + 0.2;
-            loop = null;
-            firstTime = true;
-            loadAheadOffset = 0.0;
-            nextAfterIndex = 0;
-            loadAhead();
+            context.suspend().then(function () {
+                player.currentSequence = null;
+                player.currentSequenceCounter = 0;
+                player.currentSequenceRevolutions = 0;
+    
+                player.ended = false;
+                player.waiting = true;
+                player.scheduleComplete = false;
+                player.playing = true;
+    
+                if (!TRIGGER_BUFFER) TRIGGER_BUFFER = context.createBuffer(1, 2, context.sampleRate);
+    
+                compressorNode = context.createDynamicsCompressor();
+                compressorNode.connect(context.destination);
+    
+                destination = compressorNode;
+                player.refreshCompressor(player.composition.compressor);
+    
+                //destination = context.destination;
+    
+                startTime = context.currentTime;
+                console.log("startTime = " + startTime);
+                loop = null;
+                firstTime = true;
+                loadAheadOffset = 0.0;
+                nextAfterIndex = 0;
+                loadAhead();
+            });
         };
 
         this.stop = function () {
@@ -332,10 +335,12 @@ var DigitalFrontierAS = (function () {
 
         this.schedule = function (offset, fn) {
             if (fn) {
+                console.log("event scheduled at " + offset);
                 let source = context.createBufferSource();
                 source.buffer = TRIGGER_BUFFER;
                 source.connect(destination);
-                source.onended = function () { fn(offset); };
+                //source.onended = function () { fn(offset); };
+                source.addEventListener("ended", function () { fn(offset); });
                 source.start(startTime + offset);
             }
         };
@@ -346,15 +351,20 @@ var DigitalFrontierAS = (function () {
             if (player.scheduleComplete) return;
             var loadAheadTime = loadAheadOffset - player.currentTime();
             if (loadAheadTime < LOAD_AHEAD_TIME_MIN) {
+                if (context) console.log("currentTime = " + context.currentTime);
                 if (!player.waiting) {
-                    context.suspend();
-                    player.waiting = true;
-                    if (player.onWaiting) player.onWaiting();
+                    context.suspend().then(function () {
+                        player.waiting = true;
+                        if (player.onWaiting) player.onWaiting();
+                    });
                 }
             } else if (player.waiting && loadAheadTime > 2 * LOAD_AHEAD_TIME_MIN) {
-                context.resume();
-                player.waiting = false;
-                if (player.onPlaying) player.onPlaying();
+                console.log("playback resuming at " + context.currentTime);
+                context.resume().then(function () {
+                    console.log("playback resumed at " + context.currentTime);
+                    player.waiting = false;
+                    if (player.onPlaying) player.onPlaying();
+                });
             }
         }
 
@@ -371,7 +381,7 @@ var DigitalFrontierAS = (function () {
                 firstTime = false;
             }
             if (!loop) return;
-            console.time('loadAhead');
+            //console.time('loadAhead');
             let nextOffset = loop.nextOffset;
             if (nextOffset && nextOffset - player.currentTime() < LOAD_AHEAD_TIME_MAX) {
                 let counter = loop.counter;
@@ -396,10 +406,12 @@ var DigitalFrontierAS = (function () {
                         player.currentSequenceRevolutions = 0;
                     });
                     player.schedule(duration, finish);
+                    //player.schedule(duration+0.01, function () {}); // iPhone fix
                     player.scheduleComplete = true;
+                    console.log("Schedule complete at " + context.currentTime);
                 }
             }
-            console.timeEnd('loadAhead');
+            //console.timeEnd('loadAhead');
         }
 
 
@@ -423,6 +435,7 @@ var DigitalFrontierAS = (function () {
 
             let nextOffset = offset + sequence.numBeats * 60.0 / sequence.bpm; // Next sequence starts here
             let currentLoop = loop;
+            console.log("Scheduling sequence from " + offset + " to " + nextOffset);
             player.schedule(offset, function () {
                 player.currentSequence = currentLoop.sequenceName;
                 player.currentSequenceCounter = currentLoop.counter;
@@ -434,7 +447,9 @@ var DigitalFrontierAS = (function () {
             });
             scheduleLayout(layout, offset, function () {
                 loadAheadOffset = Math.max(loadAheadOffset, nextOffset);
+                console.log("loadAheadOffset = " + loadAheadOffset);
                 currentLoop.nextOffset = nextOffset;
+                console.log("nextOffset = " + nextOffset);
             });
         }
 
@@ -460,7 +475,9 @@ var DigitalFrontierAS = (function () {
                 scheduleBuffer(currentContext, element.sequence, element.group, sample, buffer, offset + element.time);
                 if (ondone) ondone();
             } else {
+                console.log("Loading sample " + sample);
                 loadSample(sample, function (buffer) {
+                    console.log("Loaded sample " + sample);
                     scheduleBuffer(currentContext, element.sequence, element.group, sample, buffer, offset + element.time);
                     if (ondone) ondone();
                 });

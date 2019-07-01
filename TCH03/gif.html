@@ -18,7 +18,15 @@
 /* global DigitalFrontierAS */
 var player = new DigitalFrontierAS.Player();
 
-var compositions = ["WIP_STARTTEST_STILLESTART.json"];
+player.onSampleStart = function (offs, sample, buffer) {
+	console.log("Sample starting at " + offs + ", current time is " + player.currentTime() + ": " + sample);
+}
+
+player.onSampleEnd = function (offs, sample, buffer) {
+	console.log("Sample ending at   " + offs + ", current time is " + player.currentTime() + ": " + sample);
+}
+
+var compositions = ["WIP_STARTTEST_MIN.json"];
 
 var songUrl = "";
 
@@ -78,6 +86,12 @@ function imageClicked() {
       player.load(song, "/A/");
       player.play();
       playing = true;
+      /*
+			player.schedule(1.0, function() {
+				console.log("Hei! " + player.currentTime());
+			});
+			*/
+
 			ga('send', 'event', 'DAM', 'play', songUrl);
 		}
 	}
