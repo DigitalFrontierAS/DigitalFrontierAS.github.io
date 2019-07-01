@@ -476,6 +476,24 @@ var DigitalFrontierAS = (function () {
                 if (ondone) ondone();
             } else {
                 console.log("Loading sample " + sample);
+                loadSample2(sample, function (buffer) {
+                    console.log("Loaded sample " + sample);
+                    scheduleBuffer(currentContext, element.sequence, element.group, sample, buffer, offset + element.time);
+                    if (ondone) ondone();
+                });
+            }
+        }
+
+
+        function scheduleElement2(element, offset, ondone) {
+            let sample = element.sample;
+            let buffer = sampleCache[sample];
+            const currentContext = context;
+            if (buffer) {
+                scheduleBuffer(currentContext, element.sequence, element.group, sample, buffer, offset + element.time);
+                if (ondone) ondone();
+            } else {
+                console.log("Loading sample " + sample);
                 loadSample(sample, function (buffer) {
                     console.log("Loaded sample " + sample);
                     scheduleBuffer(currentContext, element.sequence, element.group, sample, buffer, offset + element.time);
@@ -528,18 +546,28 @@ var DigitalFrontierAS = (function () {
             return makeRequest(url, 'GET', 'arraybuffer')
                 .then(function (request) {
                     console.log('loaded ' + url);
-                    context.decodeAudioData(request.response, function (buffer) {
-                        sampleCache[sample] = buffer;
-                        if (ondone) ondone(buffer);
-                    });
+                    return decodeAudioData(request.response);
+                })
+                .then(function (buffer) {
+                    sampleCache[sample] = buffer;
+                    if (ondone) ondone(buffer);
                 })
                 .catch(function (response) {
                     if (response.status === 404) {
                         if (exts.length > 0) {
                             exts.shift();
-                            return loadSample2(sample, exts);
+                            return loadSample2(sample, ondone, exts);
                         }
-                    }               
+                    }
+                });
+        }
+        
+        // Safari does not support Promise based version
+        function decodeAudioData(data) {
+            return new Promise(function (resolve, reject) {
+                context.decodeAudioData(data, function (buffer) {
+                        resolve(buffer);
+                    });
                 });
         }
         
