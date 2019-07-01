@@ -339,8 +339,8 @@ var DigitalFrontierAS = (function () {
                 let source = context.createBufferSource();
                 source.buffer = TRIGGER_BUFFER;
                 source.connect(destination);
-                //source.onended = function () { fn(offset); };
-                source.addEventListener("ended", function () { fn(offset); });
+                source.onended = function () { fn(offset); };
+                //source.addEventListener("ended", function () { fn(offset); });
                 source.start(startTime + offset);
             }
         };
