@@ -251,7 +251,7 @@ var DigitalFrontierAS = (function () {
             if (context && context.state !== "closed") context.close();
             context = new AudioContext();
             context.suspend();
-            if (!TRIGGER_BUFFER) TRIGGER_BUFFER = context.createBuffer(1, 1, context.sampleRate);
+            if (!TRIGGER_BUFFER) TRIGGER_BUFFER = context.createBuffer(1, 2, context.sampleRate);
 
             compressorNode = context.createDynamicsCompressor();
             compressorNode.connect(context.destination);
