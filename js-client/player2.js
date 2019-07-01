@@ -512,6 +512,75 @@ var DigitalFrontierAS = (function () {
             };
             request.send();
         }
+        
+        
+        function loadSample2(sample, ondone, exts) {
+            //const request = new XMLHttpRequest();
+            if (!exts) exts = extensions;
+            let url = sample;
+            if (player.baseUrl) url = player.baseUrl + url;
+            if (exts.length > 0) {
+                const dotPos = url.lastIndexOf(".");
+                if (dotPos > 0) url = url.substring(0, dotPos);
+                url += exts[0];
+            }
+            
+            return makeRequest(url, 'GET', 'arraybuffer')
+                .then(function (request) {
+                    console.log('loaded ' + url);
+                    context.decodeAudioData(request.response, function (buffer) {
+                        sampleCache[sample] = buffer;
+                        if (ondone) ondone(buffer);
+                    });
+                })
+                .catch(function (response) {
+                    if (response.status === 404) {
+                        if (exts.length > 0) {
+                            exts.shift();
+                            return loadSample2(sample, exts);
+                        }
+                    }               
+                });
+        }
+        
+        // Thanks to Chris Ferdinandi, https://gomakethings.com/promise-based-xhr/
+        function makeRequest(url, method, responseType) {
+        
+        	// Create the XHR request
+        	var request = new XMLHttpRequest();
+        
+        	// Return it as a Promise
+        	return new Promise(function (resolve, reject) {
+        
+        		// Setup our listener to process compeleted requests
+        		request.onreadystatechange = function () {
+        
+        			// Only run if the request is complete
+        			if (request.readyState !== 4) return;
+        
+        			// Process the response
+        			if (request.status >= 200 && request.status < 300) {
+        				// If successful
+        				resolve(request);
+        			} else {
+        				// If failed
+        				reject({
+        					status: request.status,
+        					statusText: request.statusText
+        				});
+        			}
+        
+        		};
+        		
+        		// Setup our HTTP request
+        		request.open(method || 'GET', url, true);
+                if (responseType) request.responseType = responseType;
+            
+        		// Send the request
+        		request.send();
+        
+        	});
+        };
 
         function getGainNode(sequenceName, groupName) {
             const key = sequenceName + "." + groupName;
