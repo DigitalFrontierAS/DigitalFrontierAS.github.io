@@ -250,7 +250,17 @@ var DigitalFrontierAS = (function () {
 
             if (context && context.state !== "closed") context.close();
             context = new AudioContext();
-            context.suspend();
+            context.suspend()
+                .then(function () {
+                    context.onstatechange = function() {
+                        if (context.state === "running") {
+                            // Safari fix! Sometimes Safari starts playing on it's own.
+                            // This is an attempt at detecting that situation and stopping the playback.
+                            if (player.waiting) context.suspend();
+                            //console.log("State: " + context.state + ", currentTime: " + context.currentTime);
+                        }
+                    }
+                });
             if (!TRIGGER_BUFFER) TRIGGER_BUFFER = context.createBuffer(1, 2, context.sampleRate);
 
             compressorNode = context.createDynamicsCompressor();
@@ -344,15 +354,19 @@ var DigitalFrontierAS = (function () {
             if (player.scheduleComplete) return;
             var loadAheadTime = loadAheadOffset - player.currentTime();
             if (loadAheadTime < LOAD_AHEAD_TIME_MIN) {
+                //if (player.waiting && context) console.log("currentTime = " + context.currentTime);
                 if (!player.waiting) {
-                    context.suspend();
-                    player.waiting = true;
-                    if (player.onWaiting) player.onWaiting();
+                    context.suspend().then(function () {
+                        player.waiting = true;
+                        if (player.onWaiting) player.onWaiting();
+                    });
                 }
             } else if (player.waiting && loadAheadTime > 2 * LOAD_AHEAD_TIME_MIN) {
-                context.resume();
                 player.waiting = false;
-                if (player.onPlaying) player.onPlaying();
+                context.resume().then(function () {
+                    //console.log("playback resumed at " + context.currentTime);
+                    if (player.onPlaying) player.onPlaying();
+                });
             }
         }
 
