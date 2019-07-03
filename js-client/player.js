@@ -252,14 +252,7 @@ var DigitalFrontierAS = (function () {
             context = new AudioContext();
             context.suspend()
                 .then(function () {
-                    context.onstatechange = function() {
-                        if (context.state === "running") {
-                            // Safari fix! Sometimes Safari starts playing on it's own.
-                            // This is an attempt at detecting that situation and stopping the playback.
-                            if (player.waiting) context.suspend();
-                            //console.log("State: " + context.state + ", currentTime: " + context.currentTime);
-                        }
-                    }
+                    //context.onstatechange = fixSafariBug;
                 });
             if (!TRIGGER_BUFFER) TRIGGER_BUFFER = context.createBuffer(1, 2, context.sampleRate);
 
@@ -321,6 +314,23 @@ var DigitalFrontierAS = (function () {
             }
         };
 
+        // Safari resumes the AudioContext after calling createBufferSource (!)
+        // This method will suspend playback if the player is in waiting state.
+        function fixSafariBug() {
+            if (context.state === "running") {
+                if (player.waiting) {
+                    context.suspend();
+                    //console.log("fixSafariBug! State: " + context.state + ", currentTime: " + context.currentTime);
+                }
+            }
+        }
+
+        function createBufferSource() {
+            const source = context.createBufferSource();
+            fixSafariBug();
+            return source;
+        }
+
         this.refreshCompressor = function (c) {
             if (compressorNode) {
                 if (!c) c = this.composition && this.composition.compressor;
@@ -340,7 +350,7 @@ var DigitalFrontierAS = (function () {
 
         this.schedule = function (offset, fn) {
             if (fn) {
-                let source = context.createBufferSource();
+                let source = createBufferSource();
                 source.buffer = TRIGGER_BUFFER;
                 source.connect(destination);
                 source.onended = function () { fn(offset); };
@@ -520,7 +530,7 @@ var DigitalFrontierAS = (function () {
 
         function scheduleBuffer(context, sequence, group, sample, buffer, offset) {
             if (context.state === "closed") return;
-            const source = context.createBufferSource();
+            const source = createBufferSource();
             source.buffer = buffer;
             source.connect(getGainNode(sequence.name, group.name));
             if (player.onSampleStart) player.schedule(offset, function (offs) { player.onSampleStart(offs, sample, buffer); });
