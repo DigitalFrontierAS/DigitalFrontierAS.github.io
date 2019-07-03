@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>decodeAudioData example</title>
+  </head>
+
+  <body>
+    <h1>decodeAudioData example</h1>
+
+    <button class="play">Play</button>
+    <button class="play2">Play2</button>
+    <button class="play3">Play3</button>
+    <button class="stop">Stop</button>
+
+    <pre></pre>
+  </body>
+<script>
+
+
+var audioCtx;
+var source;
+
+var pre = document.querySelector('pre');
+var play = document.querySelector('.play');
+var play2 = document.querySelector('.play2');
+var play3 = document.querySelector('.play3');
+var stop = document.querySelector('.stop');
+
+function getData() {
+    //source = audioCtx.createBufferSource();
+    var request = new XMLHttpRequest();
+    
+    request.open('GET', '/A/K_TWG1.wav', true);
+    request.responseType = 'arraybuffer';
+    
+    request.onload = function() {
+        pre.innerHTML += "Waveform loaded, currentTime = " + audioCtx.currentTime + "\n";
+        var audioData = request.response;
+    
+    /*
+        audioCtx.decodeAudioData(audioData, function(buffer) {
+                var myBuffer = buffer;
+                source.buffer = myBuffer;
+                pre.innerHTML += "Connecting source, currentTime = " + audioCtx.currentTime + "\n";
+                source.connect(audioCtx.destination);
+                pre.innerHTML += "Starting source, currentTime = " + audioCtx.currentTime + "\n";
+                source.start(0);
+            },
+        
+            function(e){"Error with decoding audio data" + e.error});
+    */
+    };
+
+    request.send();
+}
+
+// wire up buttons to stop and play audio, and range slider control
+
+play.onclick = function() {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    pre.innerHTML += "Play clicked, currentTime = " + audioCtx.currentTime + "\n";
+    
+    //source = audioCtx.createBufferSource();
+/*
+    audioCtx.suspend()
+        .then(function () {
+            pre.innerHTML += "Suspended, currentTime = " + audioCtx.currentTime + "\n";
+            getData();
+            //audioCtx.resume();
+            play.setAttribute('disabled', 'disabled');
+        });
+*/
+    audioCtx.suspend();
+    //getData();
+    //audioCtx.resume();
+};
+
+play2.onclick = function () {
+    pre.innerHTML += "Play2 clicked, currentTime = " + audioCtx.currentTime + "\n";
+    pre.innerHTML += "audioCtx.state = " + audioCtx.state + "\n";
+    source = audioCtx.createBufferSource();
+    //audioCtx.suspend();
+    pre.innerHTML += "source created, currentTime = " + audioCtx.currentTime + "\n";
+    pre.innerHTML += "audioCtx.state = " + audioCtx.state + "\n";
+};
+
+play3.onclick = function () {
+    pre.innerHTML += "Play3 clicked, currentTime = " + audioCtx.currentTime + "\n";
+    pre.innerHTML += "audioCtx.state = " + audioCtx.state + "\n";
+    getData();
+};
+
+stop.onclick = function() {
+    audioCtx.suspend();
+};
+
+  </script>
+</html>
+

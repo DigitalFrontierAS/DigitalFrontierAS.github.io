@@ -19,14 +19,21 @@
 var player = new DigitalFrontierAS.Player();
 
 player.onSampleStart = function (offs, sample, buffer) {
-	console.log("Sample starting at " + offs + ", current time is " + player.currentTime() + ": " + sample);
+	var ct = player.currentTime();
+	var diff = ct - offs;
+	if (diff > 0.01) {
+		console.log("Sample starting at " + offs + ", current time is " + player.currentTime() + ", diff is " + diff + ": " + sample);
+	}
 }
 
+/*
 player.onSampleEnd = function (offs, sample, buffer) {
 	console.log("Sample ending at   " + offs + ", current time is " + player.currentTime() + ": " + sample);
 }
+*/
 
-var compositions = ["WIP_STARTTEST_MIN.json"];
+//var compositions = ["WIP_STARTTEST_MIN.json"];
+var compositions = ["WIP.json"];
 
 var songUrl = "";
 

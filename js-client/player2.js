@@ -121,7 +121,6 @@ var DigitalFrontierAS = (function () {
 
 
         function nextLoop(offset, sequenceName) {
-            //console.time('nextLoop');
             if (!offset) offset = 0;
             let revolutions = 0;
             let sequence;
@@ -151,7 +150,6 @@ var DigitalFrontierAS = (function () {
                 }
             } while (revolutions === 0);
 
-            //console.timeEnd('nextLoop');
             return {
                 offset: offset,
                 sequenceName: sequenceName,
@@ -220,8 +218,8 @@ var DigitalFrontierAS = (function () {
             if (!divisibleBy) divisibleBy = 1;
             return fromInclusive + Math.floor(Math.random() * (toInclusive - fromInclusive + divisibleBy) / divisibleBy) * divisibleBy;
         }
-
-
+        
+        
 
         // ------------------------------------------------------------------------------------------------
         // Public interface
@@ -245,6 +243,7 @@ var DigitalFrontierAS = (function () {
             if (context && context.state !== "closed") context.close();
             context = new AudioContext();
             context.suspend().then(function () {
+                //context.onstatechange = fixSafariBug;
                 player.currentSequence = null;
                 player.currentSequenceCounter = 0;
                 player.currentSequenceRevolutions = 0;
@@ -315,6 +314,23 @@ var DigitalFrontierAS = (function () {
                 }
             }
         };
+        
+        // Safari resumes the AudioContext after calling createBufferSource (!)
+        // This method will suspend playback if the player is in waiting state.
+        function fixSafariBug() {
+            if (context.state === "running") {
+                if (player.waiting) {
+                    context.suspend();
+                    console.log("fixSafariBug! State: " + context.state + ", currentTime: " + context.currentTime);
+                }
+            }
+        }
+
+        function createBufferSource() {
+            const source = context.createBufferSource();
+            fixSafariBug();
+            return source;
+        }
 
         this.refreshCompressor = function (c) {
             if (compressorNode) {
@@ -335,12 +351,10 @@ var DigitalFrontierAS = (function () {
 
         this.schedule = function (offset, fn) {
             if (fn) {
-                console.log("event scheduled at " + offset);
-                let source = context.createBufferSource();
+                let source = createBufferSource();
                 source.buffer = TRIGGER_BUFFER;
                 source.connect(destination);
                 source.onended = function () { fn(offset); };
-                //source.addEventListener("ended", function () { fn(offset); });
                 source.start(startTime + offset);
             }
         };
@@ -359,10 +373,9 @@ var DigitalFrontierAS = (function () {
                     });
                 }
             } else if (player.waiting && loadAheadTime > 2 * LOAD_AHEAD_TIME_MIN) {
-                console.log("playback resuming at " + context.currentTime);
+                player.waiting = false;
                 context.resume().then(function () {
                     console.log("playback resumed at " + context.currentTime);
-                    player.waiting = false;
                     if (player.onPlaying) player.onPlaying();
                 });
             }
@@ -381,7 +394,6 @@ var DigitalFrontierAS = (function () {
                 firstTime = false;
             }
             if (!loop) return;
-            //console.time('loadAhead');
             let nextOffset = loop.nextOffset;
             if (nextOffset && nextOffset - player.currentTime() < LOAD_AHEAD_TIME_MAX) {
                 let counter = loop.counter;
@@ -406,12 +418,10 @@ var DigitalFrontierAS = (function () {
                         player.currentSequenceRevolutions = 0;
                     });
                     player.schedule(duration, finish);
-                    //player.schedule(duration+0.01, function () {}); // iPhone fix
                     player.scheduleComplete = true;
                     console.log("Schedule complete at " + context.currentTime);
                 }
             }
-            //console.timeEnd('loadAhead');
         }
 
 
@@ -435,7 +445,6 @@ var DigitalFrontierAS = (function () {
 
             let nextOffset = offset + sequence.numBeats * 60.0 / sequence.bpm; // Next sequence starts here
             let currentLoop = loop;
-            console.log("Scheduling sequence from " + offset + " to " + nextOffset);
             player.schedule(offset, function () {
                 player.currentSequence = currentLoop.sequenceName;
                 player.currentSequenceCounter = currentLoop.counter;
@@ -445,11 +454,9 @@ var DigitalFrontierAS = (function () {
             player.schedule(nextOffset, function () {
                 if (player.onSequenceEnd) player.onSequenceEnd(nextOffset, currentLoop.sequenceName, currentLoop.counter, currentLoop.revolutions);
             });
-            scheduleLayout(layout, offset, function () {
+            scheduleLayout2(layout, offset, function () {
                 loadAheadOffset = Math.max(loadAheadOffset, nextOffset);
-                console.log("loadAheadOffset = " + loadAheadOffset);
                 currentLoop.nextOffset = nextOffset;
-                console.log("nextOffset = " + nextOffset);
             });
         }
 
@@ -466,6 +473,12 @@ var DigitalFrontierAS = (function () {
             }
         }
 
+        function scheduleLayout2(layout, offset, ondone) {
+            Promise.all(layout.map(element => scheduleElement2(element, offset)))
+                .then(ondone);
+        }
+
+
 
         function scheduleElement(element, offset, ondone) {
             let sample = element.sample;
@@ -475,9 +488,7 @@ var DigitalFrontierAS = (function () {
                 scheduleBuffer(currentContext, element.sequence, element.group, sample, buffer, offset + element.time);
                 if (ondone) ondone();
             } else {
-                console.log("Loading sample " + sample);
-                loadSample2(sample, function (buffer) {
-                    console.log("Loaded sample " + sample);
+                loadSample(sample, function (buffer) {
                     scheduleBuffer(currentContext, element.sequence, element.group, sample, buffer, offset + element.time);
                     if (ondone) ondone();
                 });
@@ -490,15 +501,12 @@ var DigitalFrontierAS = (function () {
             let buffer = sampleCache[sample];
             const currentContext = context;
             if (buffer) {
-                scheduleBuffer(currentContext, element.sequence, element.group, sample, buffer, offset + element.time);
-                if (ondone) ondone();
+                return scheduleBuffer(currentContext, element.sequence, element.group, sample, buffer, offset + element.time);
             } else {
-                console.log("Loading sample " + sample);
-                loadSample(sample, function (buffer) {
-                    console.log("Loaded sample " + sample);
-                    scheduleBuffer(currentContext, element.sequence, element.group, sample, buffer, offset + element.time);
-                    if (ondone) ondone();
-                });
+                return loadSample2(sample)
+                    .then(function (buffer) {
+                        scheduleBuffer(currentContext, element.sequence, element.group, sample, buffer, offset + element.time);
+                    });
             }
         }
 
@@ -545,12 +553,11 @@ var DigitalFrontierAS = (function () {
             
             return makeRequest(url, 'GET', 'arraybuffer')
                 .then(function (request) {
-                    console.log('loaded ' + url);
                     return decodeAudioData(request.response);
                 })
                 .then(function (buffer) {
                     sampleCache[sample] = buffer;
-                    if (ondone) ondone(buffer);
+                    return buffer;
                 })
                 .catch(function (response) {
                     if (response.status === 404) {
@@ -623,7 +630,7 @@ var DigitalFrontierAS = (function () {
 
         function scheduleBuffer(context, sequence, group, sample, buffer, offset) {
             if (context.state === "closed") return;
-            const source = context.createBufferSource();
+            const source = createBufferSource();
             source.buffer = buffer;
             source.connect(getGainNode(sequence.name, group.name));
             if (player.onSampleStart) player.schedule(offset, function (offs) { player.onSampleStart(offs, sample, buffer); });
