@@ -50,7 +50,7 @@ player.onSampleEnd = function (offs, sample, buffer) {
 */
 
 //var compositions = ["WIP_STARTTEST_MIN.json"];
-var compositions = ["WIP.json"];
+var compositions = ["WIPmp3.json"];
 
 var songUrl = "";
 
@@ -107,7 +107,7 @@ function imageClicked() {
 			document.getElementById("playbutton").style.display = "none";
 			document.getElementById("video").style.display = "none";
 			document.getElementById("waiting").style.display = "block";
-      player.load(song, "/A/");
+      //player.load(song, "/A/");
       player.play();
       playing = true;
       /*
@@ -135,6 +135,7 @@ window.onload = function () {
     request.onload = function () {
       console.debug("request.onload");
       song = JSON.parse(request.responseText);
+      player.load(song, "/A/");
       /*
       var song = JSON.parse(request.responseText);
       player.load(song, "/A/");

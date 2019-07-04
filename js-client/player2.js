@@ -17,6 +17,7 @@ var DigitalFrontierAS = (function () {
             compressorNode,
             destination,
             extensions,
+            sampleTimes,
 
             loop = null,
 
@@ -82,16 +83,56 @@ var DigitalFrontierAS = (function () {
                     const key = sequence.name + "." + group.name;
                     groups[key] = group;
                     if (group.beat < 0) {
-                        let min = 1.0 - group.beat * 60.0 / sequence.bpm;
+                        const min = 1.0 - group.beat * 60.0 / sequence.bpm;
                         LOAD_AHEAD_TIME_MIN = Math.max(LOAD_AHEAD_TIME_MIN, min);
                     }
                 }
             }
+            LOAD_AHEAD_TIME_MAX = Math.max(LOAD_AHEAD_TIME_MAX, LOAD_AHEAD_TIME_MIN + 1.0);
             nextAfter = nextAfter.sort(byTime);
             extensions = player.composition.extensions;
             if (!extensions) extensions = [];
+            sampleTimes = sortSamples();
         }
-
+        
+        function sortSamples() {
+            const doneSamples = {};
+            const doneSequences = {};
+            let sequenceTimes = player.composition.start.map(function (name) { return { time: 0, name: name }; });
+            let sampleTimes = [];
+            while (sequenceTimes.length > 0) {
+                let sequenceTime = sequenceTimes.shift();
+                
+                if (doneSequences[sequenceTime.name]) continue;
+                
+                doneSequences[sequenceTime.name] = true;
+                const sequence = sequences[sequenceTime.name];
+                const nextTime = sequenceTime.time + 60 * sequence.numBeats / sequence.bpm;
+                sequenceTimes = sequenceTimes.concat(sequence.next.map(function (name) { return { time: nextTime, name: name }; }));
+                
+                const groups = sequence.groups.slice(0).sort(function (g1, g2) { 
+                    if (g1.beat === g2.beat) return 0;
+                    return (g1.beat < g2.beat) ? -1 : 1;
+                });
+                while (groups.length > 0) {
+                    let group = groups.shift();
+                    let beat = group.beat;
+                    if (beat > 0) beat--;
+                    const time = sequenceTime.time + beat * 60 / sequence.bpm;
+                    for (var i = 0; i < group.samples.length; i++) {
+                        if (doneSamples[group.samples[i]]) continue;
+                        doneSamples[group.samples[i]] = true;
+                        sampleTimes.push({ time: time, name: group.samples[i]});
+                    }
+                }
+            }
+            sampleTimes.sort(function (s1, s2) {
+                if (s1.time === s2.time) return 0;
+                return (s1.time < s2.time) ? -1 : 1;
+            });
+            return sampleTimes;
+        }
+        
 
         function tearDown() {
             Object.keys(groups).forEach(function (key) {
@@ -248,6 +289,12 @@ var DigitalFrontierAS = (function () {
             if (baseUrl.length > 0 && !baseUrl.endsWith("/")) baseUrl += "/";
 
             prepare();
+            /*
+            preloadSamples();
+            preloadSamples();
+            preloadSamples();
+            preloadSamples();
+            */
             loadAheadOffset = 0.0;
         };
 
@@ -383,7 +430,7 @@ var DigitalFrontierAS = (function () {
                         if (player.onWaiting) player.onWaiting();
                     });
                 }
-            } else if (player.waiting && loadAheadTime > 2 * LOAD_AHEAD_TIME_MIN) {
+            } else if (player.waiting && loadAheadTime > Math.min(LOAD_AHEAD_TIME_MAX, 2 * LOAD_AHEAD_TIME_MIN)) {
                 player.waiting = false;
                 context.resume().then(function () {
                     log("playback resumed at " + context.currentTime);
@@ -437,6 +484,17 @@ var DigitalFrontierAS = (function () {
 
 
         setInterval(loadAhead, 100);
+        
+        function preloadSamples() {
+            if (player.playing) return;
+            if (sampleTimes.length === 0) return;
+            const sampleTime = sampleTimes.shift();
+            if (sampleTime.time > LOAD_AHEAD_TIME_MAX) return;
+            return loadSample(sampleTime.name, null, true)
+                .then(function () {
+                    return preloadSamples();
+                });
+        }
 
 
         // ------------------------------------------------------------------------------------------------
@@ -493,8 +551,7 @@ var DigitalFrontierAS = (function () {
         }
 
 
-        function loadSample(sample, exts) {
-            //const request = new XMLHttpRequest();
+        function loadSample(sample, exts, downloadOnly) {
             if (!exts) exts = extensions;
             let url = sample;
             if (player.baseUrl) url = player.baseUrl + url;
@@ -506,9 +563,12 @@ var DigitalFrontierAS = (function () {
             
             return makeRequest(url, 'GET', 'arraybuffer')
                 .then(function (request) {
+                    log('sample loaded: ' + sample);
+                    if (downloadOnly) return;
                     return decodeAudioData(request.response);
                 })
                 .then(function (buffer) {
+                    if (downloadOnly) return;
                     sampleCache[sample] = buffer;
                     return buffer;
                 })
@@ -516,16 +576,18 @@ var DigitalFrontierAS = (function () {
                     if (response.status === 404) {
                         if (exts.length > 0) {
                             exts.shift();
-                            return loadSample(sample, exts);
+                            return loadSample(sample, exts, downloadOnly);
                         } else {
+                            if (downloadOnly) return;
                             // File not found - ignore by returning the empty trigger buffer
                             return TRIGGER_BUFFER;
                         }
                     } else {
+                        if (downloadOnly) return;
                         // Probably network error - wait 500 ms and retry 
                         return delay(500)
                             .then(function () {
-                                return loadSample(sample, exts);
+                                return loadSample(sample, exts, downloadOnly);
                             });
                     }
                 });
