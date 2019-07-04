@@ -365,7 +365,6 @@ var DigitalFrontierAS = (function () {
             if (player.scheduleComplete) return;
             var loadAheadTime = loadAheadOffset - player.currentTime();
             if (loadAheadTime < LOAD_AHEAD_TIME_MIN) {
-                if (context) console.log("currentTime = " + context.currentTime);
                 if (!player.waiting) {
                     context.suspend().then(function () {
                         player.waiting = true;
@@ -454,56 +453,27 @@ var DigitalFrontierAS = (function () {
             player.schedule(nextOffset, function () {
                 if (player.onSequenceEnd) player.onSequenceEnd(nextOffset, currentLoop.sequenceName, currentLoop.counter, currentLoop.revolutions);
             });
-            scheduleLayout2(layout, offset, function () {
-                loadAheadOffset = Math.max(loadAheadOffset, nextOffset);
-                currentLoop.nextOffset = nextOffset;
-            });
-        }
-
-
-        function scheduleLayout(layout, offset, ondone) {
-            let counter = layout.length;
-            function andThen () {
-                counter--;
-                if (ondone && counter === 0) ondone();
-            }
-            for (let i = 0; i < layout.length; i++) {
-                let element = layout[i];
-                scheduleElement(element, offset, andThen);
-            }
-        }
-
-        function scheduleLayout2(layout, offset, ondone) {
-            Promise.all(layout.map(element => scheduleElement2(element, offset)))
-                .then(ondone);
-        }
-
-
-
-        function scheduleElement(element, offset, ondone) {
-            let sample = element.sample;
-            let buffer = sampleCache[sample];
-            const currentContext = context;
-            if (buffer) {
-                scheduleBuffer(currentContext, element.sequence, element.group, sample, buffer, offset + element.time);
-                if (ondone) ondone();
-            } else {
-                loadSample(sample, function (buffer) {
-                    scheduleBuffer(currentContext, element.sequence, element.group, sample, buffer, offset + element.time);
-                    if (ondone) ondone();
+            scheduleLayout(layout, offset)
+                .then(function () {
+                    loadAheadOffset = Math.max(loadAheadOffset, nextOffset);
+                    currentLoop.nextOffset = nextOffset;
                 });
-            }
         }
 
 
-        function scheduleElement2(element, offset, ondone) {
+        function scheduleLayout(layout, offset) {
+            return Promise.all(layout.map(element => scheduleElement(element, offset)));
+        }
+
+
+        function scheduleElement(element, offset) {
             let sample = element.sample;
             let buffer = sampleCache[sample];
             const currentContext = context;
             if (buffer) {
                 return scheduleBuffer(currentContext, element.sequence, element.group, sample, buffer, offset + element.time);
             } else {
-                return loadSample2(sample)
+                return loadSample(sample)
                     .then(function (buffer) {
                         scheduleBuffer(currentContext, element.sequence, element.group, sample, buffer, offset + element.time);
                     });
@@ -511,36 +481,7 @@ var DigitalFrontierAS = (function () {
         }
 
 
-        function loadSample(sample, ondone, exts) {
-            const request = new XMLHttpRequest();
-            if (!exts) exts = extensions;
-            let url = sample;
-            if (player.baseUrl) url = player.baseUrl + url;
-            if (exts.length > 0) {
-                const dotPos = url.lastIndexOf(".");
-                if (dotPos > 0) url = url.substring(0, dotPos);
-                url += exts[0];
-            }
-            request.open('GET', url, true);
-            request.responseType = 'arraybuffer';
-            request.onloadend = function () {
-                if (request.status === 404) {
-                    if (exts.length > 0) {
-                        exts.shift();
-                        loadSample(sample, ondone, exts);
-                    }
-                } else if (request.status === 200) {
-                    context.decodeAudioData(request.response, function (buffer) {
-                        sampleCache[sample] = buffer;
-                        if (ondone) ondone(buffer);
-                    });
-                }
-            };
-            request.send();
-        }
-        
-        
-        function loadSample2(sample, ondone, exts) {
+        function loadSample(sample, exts) {
             //const request = new XMLHttpRequest();
             if (!exts) exts = extensions;
             let url = sample;
@@ -560,11 +501,21 @@ var DigitalFrontierAS = (function () {
                     return buffer;
                 })
                 .catch(function (response) {
+                    console.log('response.status = ' + response.status);
                     if (response.status === 404) {
                         if (exts.length > 0) {
                             exts.shift();
-                            return loadSample2(sample, ondone, exts);
+                            return loadSample(sample, exts);
+                        } else {
+                            // File not found - ignore by returning the empty trigger buffer
+                            return TRIGGER_BUFFER;
                         }
+                    } else {
+                        // Probably network error - wait 500 ms and retry 
+                        return delay(500)
+                            .then(function () {
+                                return loadSample(sample, exts);
+                            });
                     }
                 });
         }
@@ -576,6 +527,13 @@ var DigitalFrontierAS = (function () {
                         resolve(buffer);
                     });
                 });
+        }
+        
+        // Promise based version of setTimeout
+        function delay(time) {
+           return new Promise(function (resolve) {
+                return setTimeout(resolve, time);
+            });
         }
         
         // Thanks to Chris Ferdinandi, https://gomakethings.com/promise-based-xhr/
@@ -615,7 +573,7 @@ var DigitalFrontierAS = (function () {
         		request.send();
         
         	});
-        };
+        }
 
         function getGainNode(sequenceName, groupName) {
             const key = sequenceName + "." + groupName;
