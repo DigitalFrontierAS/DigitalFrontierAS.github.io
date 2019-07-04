@@ -24,6 +24,8 @@ var DigitalFrontierAS = (function () {
             LOAD_AHEAD_TIME_MIN = 1.0,
 
             TRIGGER_BUFFER = null;
+            
+        this.logger = null;
 
         this.composition = null;
 
@@ -160,7 +162,7 @@ var DigitalFrontierAS = (function () {
 
 
         function finish() {
-            console.log("finish()");
+            log("finish()");
             tearDown();
             if (player.onEnded) player.onEnded();
         }
@@ -220,6 +222,16 @@ var DigitalFrontierAS = (function () {
         }
         
         
+        function log(msg) {
+            if (player.logger) {
+                try {
+                    player.logger(msg);
+                }
+                catch (e) {
+                }
+            }
+        }
+        
 
         // ------------------------------------------------------------------------------------------------
         // Public interface
@@ -264,7 +276,7 @@ var DigitalFrontierAS = (function () {
                 //destination = context.destination;
     
                 startTime = context.currentTime;
-                console.log("startTime = " + startTime);
+                log("startTime = " + startTime);
                 loop = null;
                 firstTime = true;
                 loadAheadOffset = 0.0;
@@ -321,7 +333,7 @@ var DigitalFrontierAS = (function () {
             if (context.state === "running") {
                 if (player.waiting) {
                     context.suspend();
-                    console.log("fixSafariBug! State: " + context.state + ", currentTime: " + context.currentTime);
+                    log("fixSafariBug! State: " + context.state + ", currentTime: " + context.currentTime);
                 }
             }
         }
@@ -374,7 +386,7 @@ var DigitalFrontierAS = (function () {
             } else if (player.waiting && loadAheadTime > 2 * LOAD_AHEAD_TIME_MIN) {
                 player.waiting = false;
                 context.resume().then(function () {
-                    console.log("playback resumed at " + context.currentTime);
+                    log("playback resumed at " + context.currentTime);
                     if (player.onPlaying) player.onPlaying();
                 });
             }
@@ -418,7 +430,7 @@ var DigitalFrontierAS = (function () {
                     });
                     player.schedule(duration, finish);
                     player.scheduleComplete = true;
-                    console.log("Schedule complete at " + context.currentTime);
+                    log("Schedule complete at " + context.currentTime);
                 }
             }
         }
@@ -501,7 +513,6 @@ var DigitalFrontierAS = (function () {
                     return buffer;
                 })
                 .catch(function (response) {
-                    console.log('response.status = ' + response.status);
                     if (response.status === 404) {
                         if (exts.length > 0) {
                             exts.shift();

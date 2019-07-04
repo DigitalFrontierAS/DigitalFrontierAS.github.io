@@ -18,13 +18,30 @@
 /* global DigitalFrontierAS */
 var player = new DigitalFrontierAS.Player();
 
+var loggerPre;
+
+function pageLogger(msg) {
+	if (loggerPre) {
+		loggerPre.innerHTML += msg + '\n';
+	}
+}
+
+var urlParams = window.location.search;
+var logger = console.log;
+
+if (urlParams.indexOf("logger=console") > 0) {
+	player.logger = console.log;
+} else if (urlParams.indexOf("logger=page") > 0) {
+	player.logger = pageLogger;
+}
+
 player.onSampleStart = function (offs, sample, buffer) {
 	var ct = player.currentTime();
 	var diff = ct - offs;
 	if (diff > 0.01) {
 		console.log("Sample starting at " + offs + ", current time is " + player.currentTime() + ", diff is " + diff + ": " + sample);
 	}
-}
+};
 
 /*
 player.onSampleEnd = function (offs, sample, buffer) {
@@ -107,6 +124,7 @@ function imageClicked() {
 var song;
 
 window.onload = function () {
+	loggerPre = document.getElementById("logger");
   console.debug("window.onload");
   //document.getElementById("waiting").style.display = "block";
 
@@ -132,7 +150,7 @@ window.onload = function () {
     request.send();
   }
   catch (e) {}
-}
+};
 
 </script>
 
@@ -178,6 +196,10 @@ window.onload = function () {
 		position: absolute;
 		z-index: 20;
 	}
+	#logger {
+		color: white;
+		z-index: 100;
+	}
 </style>
 
 </head>
@@ -189,6 +211,7 @@ window.onload = function () {
 		<img src="design6.gif" id="video" class="maximage"/>
 		<img src="play-knapp2.png" id="playbutton" class="maximage"/>
 		<img src="/TCH02/loading.gif" id="waiting"/>
+		<pre id="logger"></pre>
 	</div>
 </body>
 </html>
